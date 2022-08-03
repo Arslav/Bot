@@ -3,6 +3,7 @@
 namespace Arslav\Newbot;
 
 use Arslav\Newbot\Commands\Vk\Base\VkCommand;
+use Arslav\Newbot\DTO\VkDto;
 use DigitalStar\vk_api\vk_api;
 use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerExceptionInterface;
@@ -18,9 +19,10 @@ class App
 
     protected static EntityManager $entityManager;
 
-    protected static array $args;
+    protected static array $args = [];
 
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
         self::$container = $container;
     }
 
@@ -76,39 +78,83 @@ class App
      */
     public function run() : void
     {
-        self::getLogger()->info('App started');
-        self::getLogger()->info('Launched from VK');
+        self::$args = [];
+        $vkDto = $this->init();
+        if($vkDto == null) {
+            self::getLogger()->info('No data received');
+            return;
+        }
+
         $commands = self::$container->get('vk-commands');
-        $data = self::getVk()->initVars($id, $message);
-        self::getLogger()->debug('Received data: ' . print_r($data, true));
-        if($data != null) {
-            //TODO: Разделить команды по типу триггеров! message_new и т.д.!!!
-            if ($data->type == 'message_new') {
-                self::getLogger()->info('New message: '. print_r($message, true));
-                $message = $data->object->text;
-                /** @var VkCommand $command */
-                foreach ($commands as $command) {
-                    foreach ($command->aliases as $alias) {
-                        //TODO: Подумать на тему префиксов
-                        $regex = str_replace('<args>', '(?<args>.*)', $alias);
-                        $regex = "/$regex/ui";
-                        if (preg_match($regex, $message, $matches)) {
-                            self::getLogger()->debug($regex);
-                            self::getLogger()->info('Command detected: ' . get_class($command));
-                            $str_args = $matches['args'] ?? '';
-                            self::$args = explode(' ', $str_args);
-                            self::getLogger()->debug('Parsed Args: ' . print_r(self::$args, true));
-                            $command->init($data);
-                            if($command->beforeAction()) {
-                                $status = $command->run();
-                                self::getLogger()->info("Command executed with status: $status");
-                                return;
-                            }
-                        }
+        //TODO: Разделить команды по типу триггеров! message_new и т.д.!!!
+        if ($vkDto->data->type == 'message_new') {
+            self::getLogger()->info('New message: '. print_r($vkDto->message, true));
+            /** @var VkCommand $command */
+            foreach ($commands as $command) {
+                foreach ($command->aliases as $alias) {
+                    $regex = $this->getRegex($alias);
+                    if (preg_match($regex, $vkDto->message, $matches)) {
+                        $this->prepareArgs($matches['args'] ?? null);
+                        $this->runCommand($command, $vkDto->data);
                     }
                 }
             }
         }
-        self::getLogger()->info('App ended');
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function runCommand(VkCommand $command, mixed $data)
+    {
+        self::getLogger()->info('Command detected: ' . get_class($command));
+        $command->init($data);
+        if($command->beforeAction()) {
+            $command->run();
+        }
+    }
+
+    /**
+     * @param string|null $str_args
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function prepareArgs(?string $str_args): void
+    {
+        if (!$str_args) {
+            return;
+        }
+
+        self::$args = explode(' ', $str_args);
+        self::getLogger()->debug('Parsed Args: ' . print_r(self::$args, true));
+    }
+
+    /**
+     * @param $alias
+     * @return string
+     */
+    protected function getRegex($alias): string
+    {
+        //TODO: Подумать на тему префиксов
+        $regex = str_replace('<args>', '(?<args>.*)', $alias);
+        return "/$regex/ui";
+    }
+
+    /**
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     */
+    protected function init(): ?VkDto
+    {
+        self::getLogger()->info('App started');
+        self::getLogger()->info('Launched from VK');
+        $data = self::getVk()->initVars($id, $message);
+        self::getLogger()->debug('Received data: ' . print_r($data, true));
+        if ($data) {
+            return new VkDto($id, $data, $message);
+        }
+        return null;
     }
 }
