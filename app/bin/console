@@ -1,3 +1,11 @@
 #!/usr/bin/env php
 <?php
-echo "Hello World!".PHP_EOL;
+
+use Arslav\Newbot\Cli;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+$container = require __DIR__ . '/../bootstrap.php';
+
+$app = new Cli($container, $argv ?? []);
+$app->run();

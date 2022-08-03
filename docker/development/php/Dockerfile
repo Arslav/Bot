@@ -48,4 +48,5 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 #run
 WORKDIR /web/app
 RUN chmod u+x /web/app/bin/console
+RUN chmod u+x /web/app/bin/doctrine
 CMD php-fpm

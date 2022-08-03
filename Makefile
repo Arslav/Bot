@@ -34,3 +34,6 @@ docker-build:
 
 docker-build-dev:
 	docker-compose build --build-arg ENV=DEV
+
+shell-php:
+	docker-compose run php bash

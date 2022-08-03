@@ -1,0 +1,62 @@
+#!/usr/bin/env php
+<?php
+
+use Doctrine\DBAL\DriverManager;
+use Doctrine\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
+use Doctrine\Migrations\Configuration\Migration\ExistingConfiguration;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
+use Doctrine\Migrations\Provider\OrmSchemaProvider;
+use Doctrine\Migrations\Provider\SchemaProvider;
+use Doctrine\Migrations\Tools\Console\Command\DiffCommand;
+use Doctrine\Migrations\Tools\Console\Command\DumpSchemaCommand;
+use Doctrine\Migrations\Tools\Console\Command\ExecuteCommand;
+use Doctrine\Migrations\Tools\Console\Command\GenerateCommand;
+use Doctrine\Migrations\Tools\Console\Command\LatestCommand;
+use Doctrine\Migrations\Tools\Console\Command\ListCommand;
+use Doctrine\Migrations\Tools\Console\Command\MigrateCommand;
+use Doctrine\Migrations\Tools\Console\Command\RollupCommand;
+use Doctrine\Migrations\Tools\Console\Command\StatusCommand;
+use Doctrine\Migrations\Tools\Console\Command\SyncMetadataCommand;
+use Doctrine\Migrations\Tools\Console\Command\VersionCommand;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+$container = require __DIR__ . '/../bootstrap.php';
+
+$entityManager = $container->get(EntityManager::class);
+$connection = $container->get(DriverManager::class);
+
+$configuration = new Configuration();
+$configuration->addMigrationsDirectory('Arslav\Newbot\Migrations', 'src/Migrations');
+$configuration->setAllOrNothing(true);
+$configuration->setCheckDatabasePlatform(false);
+
+$storageConfiguration = new TableMetadataStorageConfiguration();
+$storageConfiguration->setTableName('doctrine_migration_versions');
+
+$configuration->setMetadataStorageConfiguration($storageConfiguration);
+
+$df = DependencyFactory::fromConnection(
+    new ExistingConfiguration($configuration),
+    new ExistingConnection($connection)
+);
+
+$df->setService(SchemaProvider::class, new OrmSchemaProvider($entityManager));
+
+
+ConsoleRunner::run(new SingleManagerProvider($entityManager), [
+    new DumpSchemaCommand($df),
+    new ExecuteCommand($df),
+    new GenerateCommand($df),
+    new LatestCommand($df),
+    new ListCommand($df),
+    new MigrateCommand($df),
+    new RollupCommand($df),
+    new StatusCommand($df),
+    new SyncMetadataCommand($df),
+    new VersionCommand($df),
+    new DiffCommand($df)
+]);
