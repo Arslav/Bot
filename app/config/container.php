@@ -4,6 +4,7 @@ use DigitalStar\vk_api\vk_api;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Container\ContainerInterface;
@@ -21,13 +22,15 @@ return [
     'DB_PASSWORD' => DI\env('DB_PASSWORD'),
     'DB_NAME' => DI\env('DB_NAME'),
 
-    'isDev' => DI\factory(function ($c) {
-        return $c->get('ENVIRONMENT') == 'dev';
-    }),
+    'isDev' => DI\factory(fn (ContainerInterface $c) => $c->get('ENVIRONMENT') == 'dev'),
 
-    StreamHandler::class => DI\factory(function (ContainerInterface $c) {
-        return new StreamHandler('logs/app.log', $c->get('LOG_LEVEL'));
-    }),
+    StreamHandler::class => DI\factory(fn (ContainerInterface $c) =>
+        new RotatingFileHandler(
+            'logs/app.log',
+            5,
+            $c->get('LOG_LEVEL')
+        )
+    ),
 
     Psr\Log\LoggerInterface::class => DI\factory(function (ContainerInterface $c) {
         $logger = new Logger('bot');
