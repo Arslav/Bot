@@ -2,7 +2,6 @@
 
 namespace Arslav\Newbot\Commands\Cli\Base;
 
-use Arslav\Newbot\App;
 use Arslav\Newbot\Commands\Command;
 
 abstract class CliCommand extends Command

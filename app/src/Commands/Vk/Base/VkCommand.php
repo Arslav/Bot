@@ -2,9 +2,7 @@
 
 namespace Arslav\Newbot\Commands\Vk\Base;
 
-use Arslav\Newbot\App;
 use Arslav\Newbot\Commands\Command;
-use JetBrains\PhpStorm\Pure;
 
 abstract class VkCommand extends Command
 {

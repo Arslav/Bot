@@ -20,12 +20,11 @@ services:
       - ./app/:/web/app
     working_dir: /web/app/
     environment:
-      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
       PHP_IDE_CONFIG: "serverName=Docker"
     env_file:
       - .env
-    ports:
-      - "${XDEBUG_PORT}:9001"
+    extra_hosts:
+      - host.docker.internal:host-gateway
   postgres:
     image: postgres:11
     restart: unless-stopped

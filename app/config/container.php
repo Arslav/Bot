@@ -26,7 +26,7 @@ return [
 
     StreamHandler::class => DI\factory(fn (ContainerInterface $c) =>
         new RotatingFileHandler(
-            'logs/app.log',
+            __DIR__ . '/../logs/app.log',
             5,
             $c->get('LOG_LEVEL')
         )

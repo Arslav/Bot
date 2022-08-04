@@ -37,3 +37,9 @@ docker-build-dev:
 
 shell-php:
 	docker-compose run php bash
+
+test:
+	docker-compose run php vendor/bin/codecept run
+
+test-with-coverage:
+	docker-compose run php vendor/bin/codecept run --coverage --coverage-xml --coverage-html

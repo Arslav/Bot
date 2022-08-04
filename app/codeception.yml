@@ -15,3 +15,11 @@ settings:
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
+coverage:
+    enabled: true
+    include:
+        - src/*
+    exclude:
+        - src/DTO/*
+        - src/Migrations/*
+        - src/Entities/*

@@ -37,7 +37,7 @@ COPY ./app/ /web/app/
 
 ARG ENV
 
-#install xdebug and xprof
+#install xdebug
 RUN chmod u+x devinstall.sh && \
     ./devinstall.sh
 
