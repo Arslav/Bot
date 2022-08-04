@@ -36,17 +36,6 @@ abstract class VkCommand extends Command
     //TODO: Параметр для отключения ^ $
 
     /**
-     * CliCommand constructor.
-     *
-     * @param array $aliases
-     */
-    #[Pure]
-    public function __construct(array $aliases)
-    {
-        $this->args = App::getArgs();
-        parent::__construct($aliases);
-    }
-    /**
      * @param mixed $data
      */
     public function init(mixed $data) : void

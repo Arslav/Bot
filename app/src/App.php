@@ -19,19 +19,9 @@ class App
 
     protected static EntityManager $entityManager;
 
-    protected static array $args = [];
-
     public function __construct(ContainerInterface $container)
     {
         self::$container = $container;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getArgs(): array
-    {
-        return self::$args;
     }
 
     /**
@@ -78,25 +68,30 @@ class App
      */
     public function run() : void
     {
-        self::$args = [];
         $vkDto = $this->init();
         if($vkDto == null) {
             self::getLogger()->info('No data received');
             return;
         }
-
-        $commands = self::$container->get('vk-commands');
         //TODO: Разделить команды по типу триггеров! message_new и т.д.!!!
-        if ($vkDto->data->type == 'message_new') {
-            self::getLogger()->info('New message: '. print_r($vkDto->message, true));
-            /** @var VkCommand $command */
-            foreach ($commands as $command) {
-                foreach ($command->aliases as $alias) {
-                    $regex = $this->getRegex($alias);
-                    if (preg_match($regex, $vkDto->message, $matches)) {
-                        $this->prepareArgs($matches['args'] ?? null);
-                        $this->runCommand($command, $vkDto->data);
+        if ($vkDto->data->type != 'message_new') {
+            self::getLogger()->error('Unsupported type');
+            return;
+        }
+
+        self::getLogger()->info('New message: '. print_r($vkDto->message, true));
+        /** @var VkCommand $command */
+        $commands = self::$container->get('vk-commands');
+        foreach ($commands as $command) {
+            foreach ($command->aliases as $alias) {
+                $regex = $this->getRegex($alias);
+                if (preg_match($regex, $vkDto->message, $matches)) {
+                    if (isset($matches['args'])) {
+                        $args = $this->prepareArgs($matches['args']);
+                        $command->setArgs($args);
                     }
+                    $this->runCommand($command, $vkDto->data);
+                    return;
                 }
             }
         }
@@ -116,19 +111,18 @@ class App
     }
 
     /**
-     * @param string|null $str_args
-     * @return void
+     * @param string $args
+     *
+     * @return array
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function prepareArgs(?string $str_args): void
+    protected function prepareArgs(string $args): array
     {
-        if (!$str_args) {
-            return;
-        }
-
-        self::$args = explode(' ', $str_args);
-        self::getLogger()->debug('Parsed Args: ' . print_r(self::$args, true));
+        $result = explode(' ', $args);
+        self::getLogger()->debug('Parsed Args: ' . print_r($result, true));
+        return $result;
     }
 
     /**

@@ -6,9 +6,11 @@ use Arslav\Newbot\Commands\Cli\Base\CliCommand;
 
 class EchoCommand extends CliCommand
 {
-    public function run(): int
+    /**
+     * @return void
+     */
+    public function run(): void
     {
-        echo $this->args[1].PHP_EOL;
-        return 0;
+        echo $this->args[0].PHP_EOL;
     }
 }

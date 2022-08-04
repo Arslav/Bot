@@ -2,6 +2,7 @@
 
 namespace Arslav\Newbot\Commands;
 
+
 abstract class Command
 {
     public array $aliases = [];
@@ -25,5 +26,14 @@ abstract class Command
         $this->aliases = $aliases;
     }
 
-    public abstract function run();
+    /**
+     * @param array $args
+     * @return void
+     */
+    public function setArgs(array $args)
+    {
+        $this->args = $args;
+    }
+
+    public abstract function run(): void;
 }
