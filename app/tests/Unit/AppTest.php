@@ -45,9 +45,14 @@ class AppTest extends Unit
         $this->data = json_decode(json_encode($dataArray), false);
         $this->container = ContainerBuilder::build();
         $this->container->set(LoggerInterface::class, $this->constructEmpty(LoggerInterface::class));
-        $this->app = $this->make(new App($this->container), [
-            'init' => new VkDto(1, $this->data, 'test')
-        ]);
+        $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
+            'initVars' => function(&$id, &$message) use ($dataArray) {
+                $id = $this->data->object->peer_id;
+                $message = $this->data->object->text;
+                return $this->data;
+            }
+        ]));
+        $this->app = new App($this->container);
         parent::setUp();
     }
 
@@ -65,7 +70,7 @@ class AppTest extends Unit
         $command = $this->construct(
             VkCommand::class,
             [$commandAliases],
-            ['run' => fn() => true]
+            ['run' => null]
         );
         $this->container->set('vk-commands', [$command]);
         $this->data->text = $message;
@@ -100,6 +105,36 @@ class AppTest extends Unit
      */
     public function testRun()
     {
+        $this->app->run();
+    }
+
+    /**
+     * @return void
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function testRunWithoutMessage()
+    {
+        $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
+            'initVars' => null
+        ]));
+        $this->app = new App($this->container);
+        $this->app->run();
+    }
+
+    /**
+     * @return void
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function testRunUnsupportedMessage()
+    {
+        $this->data->type = 'unsupported';
+        $this->app = $this->make(new App($this->container), [
+            'init' => new VkDto(1, $this->data, 'test')
+        ]);
         $this->app->run();
     }
 
