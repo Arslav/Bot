@@ -17,14 +17,15 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use stdClass;
+use Tests\Support\UnitTester;
 
 class AppTest extends Unit
 {
     protected App $app;
 
-    protected stdClass $data;
-
     protected ?Container $container;
+
+    protected UnitTester $tester;
 
     /**
      * @return void
@@ -33,23 +34,13 @@ class AppTest extends Unit
      */
     protected function setUp(): void
     {
-        $dataArray = [
-            'object' => [
-                'peer_id' => 1,
-                'text' => 'test',
-                'payload' => [],
-                'from_id' => 1,
-            ],
-            'type' => 'message_new'
-        ];
-        $this->data = json_decode(json_encode($dataArray), false);
         $this->container = ContainerBuilder::build();
         $this->container->set(LoggerInterface::class, $this->constructEmpty(LoggerInterface::class));
         $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
-            'initVars' => function(&$id, &$message) use ($dataArray) {
-                $id = $this->data->object->peer_id;
-                $message = $this->data->object->text;
-                return $this->data;
+            'initVars' => function(&$id, &$message){
+                $id = $this->tester->getVkMessageData()->object->peer_id;
+                $message = $this->tester->getVkMessageData()->object->text;
+                return $this->tester->getVkMessageData();
             }
         ]));
         $this->app = new App($this->container);
@@ -73,10 +64,7 @@ class AppTest extends Unit
             ['run' => null]
         );
         $this->container->set('vk-commands', [$command]);
-        $this->data->text = $message;
-        $this->app = $this->make(new App($this->container), [
-            'init' => new VkDto(1, $this->data, $message)
-        ]);
+        $this->tester->sendMessage($message);
         $this->app->run();
         $this->assertSame($args, $command->args);
     }
@@ -128,12 +116,15 @@ class AppTest extends Unit
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws Exception
      */
     public function testRunUnsupportedMessage()
     {
-        $this->data->type = 'unsupported';
+        $this->tester->sendMessage('test');
+        $data = $this->tester->getVkMessageData();
+        $data->type = 'unsupported';
         $this->app = $this->make(new App($this->container), [
-            'init' => new VkDto(1, $this->data, 'test')
+            'init' => new VkDto(1, $data, 'test')
         ]);
         $this->app->run();
     }
@@ -150,10 +141,7 @@ class AppTest extends Unit
             $this->construct(VkCommand::class, [['test2']], ['run' => Expected::never()]),
             $this->construct(VkCommand::class, [['test3']], ['run' => Expected::never()]),
         ]);
-        $this->data->text = 'test';
-        $this->app = $this->make(new App($this->container), [
-            'init' => new VkDto(1, $this->data, 'test')
-        ]);
+        $this->tester->sendMessage('test');
         $this->app->run();
     }
 

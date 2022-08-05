@@ -37,6 +37,7 @@ class Cli extends App
      */
     public function run(): void
     {
+        self::getLogger()->info('App started');
         self::getLogger()->info('Launched from CLI');
         self::getLogger()->debug('Args: ' . print_r($this->args, true));
 

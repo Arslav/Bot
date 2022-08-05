@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Unit\Commands;
+namespace Tests\Unit\Commands;
 
 use Arslav\Newbot\Commands\Command;
 use Codeception\Test\Unit;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Unit\Commands\Cli\Base;
+namespace Tests\Unit\Commands\Cli\Base;
 
 use Arslav\Newbot\Commands\Cli\Base\CliCommand;
 use Codeception\Stub\Expected;

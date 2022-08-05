@@ -6,27 +6,11 @@ use Arslav\Newbot\Commands\Vk\Base\VkCommand;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use Exception;
+use Tests\Support\UnitTester;
 
 class VkCommandTest extends Unit
 {
-    private mixed $data;
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $dataArray = [
-            'object' => [
-                'peer_id' => 1,
-                'text' => 'test',
-                'payload' => [],
-                'from_id' => 1,
-            ],
-            'type' => 'message_new'
-        ];
-        $this->data = json_decode(json_encode($dataArray), false);
-    }
+    public UnitTester $tester;
 
     /**
      * @return void
@@ -35,12 +19,13 @@ class VkCommandTest extends Unit
      */
     public function testRun()
     {
+        $this->tester->sendMessage('test');
         $command = $this->construct(
             VkCommand::class,
             [['test']],
             ['run' => Expected::once()]
         );
-        $command->init($this->data);
+        $command->init($this->tester->getVkMessageData());
         $command->run();
     }
 
@@ -51,12 +36,13 @@ class VkCommandTest extends Unit
      */
     public function testInit()
     {
+        $this->tester->sendMessage('test');
         $command = $this->construct(
             VkCommand::class,
             [['test']],
             ['run' => Expected::never()]
         );
-        $command->init($this->data);
+        $command->init($this->tester->getVkMessageData());
         $this->assertIsObject($command->data);
         $this->assertIsString($command->message);
         $this->assertIsInt($command->peer_id);
@@ -73,13 +59,15 @@ class VkCommandTest extends Unit
      */
     public function testIsFromChat(int $peer_id, bool $expected)
     {
-        $this->data->object->peer_id = $peer_id;
+        $this->tester->sendMessage('test');
+        $data = $this->tester->getVkMessageData();
+        $data->object->peer_id = $peer_id;
         $command = $this->construct(
             VkCommand::class,
             [['test']],
             ['run' => Expected::never()]
         );
-        $command->init($this->data);
+        $command->init($data);
         $this->assertSame($expected, $command->isFromChat());
     }
 
