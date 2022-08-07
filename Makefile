@@ -43,3 +43,6 @@ test:
 
 test-with-coverage:
 	docker-compose run php vendor/bin/codecept run --coverage --coverage-xml --coverage-html
+
+migrate-test:
+	docker-compose run -e DB_NAME='test' php bin/doctrine migrations:migrate -n

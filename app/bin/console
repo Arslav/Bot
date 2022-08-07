@@ -1,11 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+require_once __DIR__ . '/../bootstrap.php';
+
 use Arslav\Newbot\Cli;
-use Psr\Container\ContainerInterface;
 
-/** @var ContainerInterface $container */
-$container = require __DIR__ . '/../bootstrap.php';
-
-$app = new Cli($container, $argv ?? []);
+$app = new Cli($argv ?? []);
 $app->run();

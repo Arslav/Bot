@@ -11,6 +11,8 @@ class ContainerBuilder {
 
     /**
      * @return Container|null
+     *
+     * @throws Exception
      */
     public static function build(): ?Container
     {
@@ -18,6 +20,7 @@ class ContainerBuilder {
             $builder = new DI\ContainerBuilder();
             $builder->useAnnotations(true);
             $builder->addDefinitions(__DIR__.'/config/container.php');
+            $builder->addDefinitions(__DIR__.'/config/services.php');
             $builder->addDefinitions(__DIR__.'/config/cli-commands.php');
             $builder->addDefinitions(__DIR__.'/config/vk-commands.php');
             static::$container = $builder->build();
@@ -26,4 +29,3 @@ class ContainerBuilder {
     }
 }
 
-return ContainerBuilder::build();

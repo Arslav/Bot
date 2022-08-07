@@ -12,6 +12,7 @@ class EchoCommand extends VkCommand
 {
     /**
      * @inheritDoc
+     *
      * @throws VkApiException
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface

@@ -43,7 +43,7 @@ class AppTest extends Unit
                 return $this->tester->getVkMessageData();
             }
         ]));
-        $this->app = new App($this->container);
+        $this->app = new App();
         parent::setUp();
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Unit\Commands\Vk\Base;
+namespace Tests\Unit\Commands\Vk\Base;
 
 use Arslav\Newbot\Commands\Vk\Base\VkCommand;
 use Codeception\Stub\Expected;
@@ -47,7 +47,7 @@ class VkCommandTest extends Unit
         $this->assertIsString($command->message);
         $this->assertIsInt($command->peer_id);
         $this->assertIsInt($command->from_id);
-        $this->assertIsInt($command->chat_id);
+        $this->assertNull($command->chat_id);
     }
 
     /**

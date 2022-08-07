@@ -29,7 +29,7 @@ services:
     image: postgres:11
     restart: unless-stopped
     ports:
-      - "${DB_PORT}:5432"
+      - "${DOCKER_DB_PORT}:5432"
     volumes:
       - postgresdata:/data/postgres
     environment:

@@ -24,7 +24,7 @@ abstract class VkCommand extends Command
     /**
      * @var string
      */
-    public $chat_id;
+    public $chat_id = null;
 
     /**
      * @var mixed
@@ -43,7 +43,10 @@ abstract class VkCommand extends Command
         $this->peer_id = $data->object->peer_id;
         $this->from_id = $data->object->from_id;
         //См. https://kotoff.net/article/31-vk-bot-poleznye-funkcii-komandy-dlja-bota-vk.html
-        $this->chat_id = $data->object->peer_id - 2000000000;
+        $chatId = $this->peer_id - 2000000000;
+        if ($chatId > 0) {
+            $this->chat_id = $chatId;
+        }
     }
 
     /**
@@ -52,7 +55,7 @@ abstract class VkCommand extends Command
     public function isFromChat(): bool
     {
         //Если $chat_id > 0, то сообщение в беседе, если меньше, то ЛС.
-        return $this->chat_id > 0;
+        return (bool) $this->chat_id;
     }
 
     /**

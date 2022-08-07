@@ -11,10 +11,10 @@ trait TimestampTrait
 {
 
     /** @Column(type="integer") */
-    protected $created_at;
+    protected ?int $created_at = null;
 
     /** @Column(type="integer") */
-    protected $updated_at;
+    protected int $updated_at;
 
     /**
      * @PrePersist
@@ -47,7 +47,10 @@ trait TimestampTrait
         $this->created_at = $created_at->getTimestamp();
     }
 
-    public function getUpdatedAt()
+    /**
+     * @return Carbon
+     */
+    public function getUpdatedAt(): Carbon
     {
         return Carbon::createFromTimestamp($this->updated_at);
     }

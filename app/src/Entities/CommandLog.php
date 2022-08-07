@@ -8,10 +8,12 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Table;
 
 /**
  * @Entity
  * @HasLifecycleCallbacks
+ * @Table(name="command_log")
  */
 class CommandLog
 {
@@ -21,28 +23,31 @@ class CommandLog
      * @Column(type="integer")
      * @GeneratedValue
      */
-    protected $id;
+    protected int $id;
 
     /** @Column(type="integer", nullable=false) */
-    protected $user_id;
+    protected int $from_id;
+
+    /** @Column(type="integer", nullable=true) */
+    protected ?int $chat_id;
 
     /** @Column(type="string", length=255, nullable=false) */
-    protected $command;
+    protected string $command;
 
     /**
      * @return int
      */
-    public function getUserId(): int
+    public function getFromId(): int
     {
-        return $this->user_id;
+        return $this->from_id;
     }
 
     /**
-     * @param int $user_id
+     * @param int $from_id
      */
-    public function setUserId(int $user_id): void
+    public function setFromId(int $from_id): void
     {
-        $this->user_id = $user_id;
+        $this->from_id = $from_id;
     }
 
     /**
@@ -59,6 +64,22 @@ class CommandLog
     public function setCommand(string $command): void
     {
         $this->command = $command;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getChatId(): ?int
+    {
+        return $this->chat_id;
+    }
+
+    /**
+     * @param int|null $chat_id
+     */
+    public function setChatId(?int $chat_id): void
+    {
+        $this->chat_id = $chat_id;
     }
 
 }

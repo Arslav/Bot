@@ -19,6 +19,7 @@ abstract class Command
 
     /**
      * AbstractBaseCommand constructor.
+     *
      * @param array $aliases
      */
     public function __construct(array $aliases)
@@ -28,6 +29,7 @@ abstract class Command
 
     /**
      * @param array $args
+     *
      * @return void
      */
     public function setArgs(array $args)

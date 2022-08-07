@@ -42,7 +42,7 @@ class CliTest extends Unit
             ['run' => Expected::exactly((int) $expectRun)]
         );
         $this->container->set('cli-commands', [$command]);
-        $app = new Cli($this->container, array_merge(['./bin/console', 'test'], $args));
+        $app = new Cli(array_merge(['./bin/console', 'test'], $args));
         $app->run();
         if ($expectRun) {
             $this->assertSame($args, $command->args);

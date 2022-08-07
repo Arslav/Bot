@@ -5,6 +5,9 @@
 actor: UnitTester
 modules:
     enabled:
+        - Codeception\Module\Cli
         - \Tests\Support\Helper\Message
         - Asserts
-    step_decorators: ~
+        - Doctrine2:
+            depends: \Tests\Support\Modules\DatabaseMigration
+step_decorators: ~
