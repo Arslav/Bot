@@ -107,7 +107,7 @@ class AppTest extends Unit
         $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
             'initVars' => null
         ]));
-        $this->app = new App($this->container);
+        $this->app = new App();
         $this->app->run();
     }
 
@@ -123,7 +123,7 @@ class AppTest extends Unit
         $this->tester->sendMessage('test');
         $data = $this->tester->getVkMessageData();
         $data->type = 'unsupported';
-        $this->app = $this->make(new App($this->container), [
+        $this->app = $this->make(new App(), [
             'init' => new VkDto(1, $data, 'test')
         ]);
         $this->app->run();

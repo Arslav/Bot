@@ -6,7 +6,10 @@ use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use ContainerBuilder;
 use DigitalStar\vk_api\vk_api;
+use DigitalStar\vk_api\VkApiException;
 use Exception;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Tests\Support\UnitTester;
 
 class VkEchoCommandTest extends Unit
@@ -29,6 +32,13 @@ class VkEchoCommandTest extends Unit
         parent::setUp();
     }
 
+    /**
+     * @return void
+     *
+     * @throws VkApiException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function testRun()
     {
         $this->tester->sendMessage('test');

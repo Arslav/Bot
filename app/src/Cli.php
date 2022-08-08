@@ -3,6 +3,7 @@
 namespace Arslav\Newbot;
 
 use Arslav\Newbot\Commands\Cli\Base\CliCommand;
+use Arslav\Newbot\Commands\Cli\HelpCommand;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -18,10 +19,8 @@ class Cli extends App
      */
     public function __construct(array $args)
     {
-        //TODO: В случае запуска без аргументов выводить справку
         array_shift($args);
-        $this->commandAlias = $args[0];
-
+        $this->commandAlias = $args[0] ?? 'help';
         array_shift($args);
         $this->args = $args;
     }
@@ -41,6 +40,9 @@ class Cli extends App
 
         /** @var CliCommand $command */
         $commands = self::getContainer()->get('cli-commands');
+        $helpCommand =  new HelpCommand();
+        $commands[] = $helpCommand;
+
         foreach ($commands as $command) {
             if (in_array($this->commandAlias, $command->aliases)) {
                 self::getLogger()->info('Command detected: ' . get_class($command));
@@ -48,11 +50,14 @@ class Cli extends App
                     if ($this->args) {
                         $command->setArgs($this->args);
                     }
-                    $command->run();
 
+                    $command->run();
                     return;
                 }
             }
         }
+        echo "Ошибка! Команда {$this->commandAlias} не распознана!" . PHP_EOL . PHP_EOL;
+
+        $helpCommand->run();
     }
 }

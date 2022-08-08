@@ -4,6 +4,9 @@ namespace Arslav\Newbot\Commands\Cli;
 
 use Arslav\Newbot\Commands\Cli\Base\CliCommand;
 
+/**
+ * Команда выводящая первый из переданных аргументов
+ */
 class EchoCommand extends CliCommand
 {
     /**

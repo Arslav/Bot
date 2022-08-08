@@ -14,8 +14,6 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\PostgreSQLSchemaManager;
 use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -51,7 +49,7 @@ class DatabaseMigration extends Module implements DoctrineProvider
 
             /** @var Cli $cli */
             $cli = $this->getModule(Cli::class);
-            $cli->runShellCommand("DB_NAME={$database} bin/doctrine migrations:migrate -n");
+            $cli->runShellCommand("DB_NAME=$database bin/doctrine migrations:migrate -n");
             self::$migrated = true;
         }
     }

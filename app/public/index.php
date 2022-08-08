@@ -1,11 +1,8 @@
 <?php
 
-/** @var ContainerInterface $container */
+require __DIR__ . '/../bootstrap.php';
 
 use Arslav\Newbot\App;
-use Psr\Container\ContainerInterface;
 
-$container = require __DIR__ . '/../bootstrap.php';
-
-$app = new App($container);
+$app = new App();
 $app->run();

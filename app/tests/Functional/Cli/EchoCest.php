@@ -7,7 +7,11 @@ use Tests\Support\FunctionalTester;
 
 class EchoCest
 {
-    // tests
+    /**
+     * @param FunctionalTester $I
+     *
+     * @return void
+     */
     public function tryToTest(FunctionalTester $I)
     {
         $I->wantToTest('Echo command');
