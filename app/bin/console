@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/../bootstrap.php';
-
 use Arslav\Newbot\Cli;
 
-$app = new Cli($argv ?? []);
+$container = require_once __DIR__ . '/../bootstrap.php';
+
+$app = new Cli($container, $argv ?? []);
 $app->run();

@@ -1,5 +1,9 @@
 <?php
 
+use Arslav\Newbot\App;
+
 $_ENV['DB_NAME']='test';
 
-require_once __DIR__ . '/../bootstrap.php';
+$container = require_once __DIR__ . '/../bootstrap.php';
+
+return new App($container);

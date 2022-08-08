@@ -8,7 +8,6 @@ use Codeception\Lib\Interfaces\DoctrineProvider;
 use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Codeception\Module\Cli;
-use ContainerBuilder;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -18,7 +17,7 @@ use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class DatabaseMigration extends Module implements DoctrineProvider
+class Database extends Module implements DoctrineProvider
 {
     protected static bool $migrated = false;
 
@@ -31,7 +30,7 @@ class DatabaseMigration extends Module implements DoctrineProvider
      */
     public function __construct(ModuleContainer $moduleContainer, ?array $config = null)
     {
-        $this->container = ContainerBuilder::build();
+        $this->container = App::getContainer();
         parent::__construct($moduleContainer, $config);
     }
 

@@ -6,7 +6,7 @@ use Arslav\Newbot\Cli;
 use Arslav\Newbot\Commands\Cli\Base\CliCommand;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
-use ContainerBuilder;
+use Arslav\Newbot\App;
 use DI\Container;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -20,7 +20,7 @@ class CliTest extends Unit
 
     protected function setUp(): void
     {
-        $this->container = ContainerBuilder::build();
+        $this->container = App::getContainer();
         $this->container->set(LoggerInterface::class, $this->constructEmpty(LoggerInterface::class));
         parent::setUp();
     }
@@ -42,7 +42,7 @@ class CliTest extends Unit
             ['run' => Expected::exactly((int) $expectRun)]
         );
         $this->container->set('cli-commands', [$command]);
-        $app = new Cli(array_merge(['./bin/console', 'test'], $args));
+        $app = new Cli($this->container, array_merge(['./bin/console', 'test'], $args));
         $app->run();
         if ($expectRun) {
             $this->assertSame($args, $command->args);

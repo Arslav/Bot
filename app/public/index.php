@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__ . '/../bootstrap.php';
-
 use Arslav\Newbot\App;
 
-$app = new App();
+$container = require __DIR__ . '/../bootstrap.php';
+
+$app = new App($container);
 $app->run();

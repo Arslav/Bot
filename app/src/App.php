@@ -4,7 +4,7 @@ namespace Arslav\Newbot;
 
 use Arslav\Newbot\Commands\Vk\Base\VkCommand;
 use Arslav\Newbot\DTO\VkDto;
-use ContainerBuilder;
+use DI\Container;
 use DigitalStar\vk_api\vk_api;
 use Doctrine\ORM\EntityManager;
 use Exception;
@@ -15,6 +15,8 @@ use Psr\Log\LoggerInterface;
 
 class App
 {
+    protected static ContainerInterface $container;
+
     /**
      * @return vk_api
      *
@@ -52,12 +54,19 @@ class App
     }
 
     /**
-     * @return ContainerInterface
-     * @throws Exception
+     * @return ContainerInterface|Container
      */
-    public static function getContainer(): ContainerInterface
+    public static function getContainer(): ContainerInterface|Container
     {
-        return ContainerBuilder::build();
+        return self::$container;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        self::$container = $container;
     }
 
     /**

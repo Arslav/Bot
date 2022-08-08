@@ -22,7 +22,7 @@ return [
     'VK_API_TOKEN' => env('VK_API_TOKEN'),
     'VK_API_VERSION' => env('VK_API_VERSION'),
     'VK_API_CONFIRM_STRING' => env('VK_API_CONFIRM_STRING'),
-    'DB_HOST' => getenv('DB_HOST'),
+    'DB_HOST' => env('DB_HOST'),
     'DB_PORT' => env('DB_PORT'),
     'DB_USER' => env('DB_USER'),
     'DB_PASSWORD' => env('DB_PASSWORD'),

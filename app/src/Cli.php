@@ -6,6 +6,7 @@ use Arslav\Newbot\Commands\Cli\Base\CliCommand;
 use Arslav\Newbot\Commands\Cli\HelpCommand;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 class Cli extends App
@@ -15,14 +16,16 @@ class Cli extends App
     private string $commandAlias;
 
     /**
+     * @param ContainerInterface $container
      * @param array $args
      */
-    public function __construct(array $args)
+    public function __construct(ContainerInterface $container, array $args)
     {
         array_shift($args);
         $this->commandAlias = $args[0] ?? 'help';
         array_shift($args);
         $this->args = $args;
+        parent::__construct($container);
     }
 
     /**

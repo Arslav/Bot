@@ -8,13 +8,13 @@ use Arslav\Newbot\Entities\CommandLog;
 use Arslav\Newbot\Services\CommandStats;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
-use ContainerBuilder;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
+use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Tests\Support\UnitTester;
@@ -29,12 +29,15 @@ class LimitedVkCommandTest extends Unit
 
     /**
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws DependencyException
      * @throws NotFoundException
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
      */
     protected function setUp(): void
     {
-        $container = ContainerBuilder::build();
+        $container = App::getContainer();
         $this->command = $this->construct(
             LimitedVkCommand::class,
             [['test']],

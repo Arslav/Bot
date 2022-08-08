@@ -7,7 +7,6 @@ use Arslav\Newbot\Commands\Vk\Base\VkCommand;
 use Arslav\Newbot\DTO\VkDto;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
-use ContainerBuilder;
 use DI\Container;
 use DigitalStar\vk_api\vk_api;
 use Doctrine\ORM\EntityManager;
@@ -34,7 +33,7 @@ class AppTest extends Unit
      */
     protected function setUp(): void
     {
-        $this->container = ContainerBuilder::build();
+        $this->container = App::getContainer();
         $this->container->set(LoggerInterface::class, $this->constructEmpty(LoggerInterface::class));
         $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
             'initVars' => function(&$id, &$message){
@@ -43,7 +42,7 @@ class AppTest extends Unit
                 return $this->tester->getVkMessageData();
             }
         ]));
-        $this->app = new App();
+        $this->app = new App($this->container);
         parent::setUp();
     }
 
@@ -107,7 +106,7 @@ class AppTest extends Unit
         $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
             'initVars' => null
         ]));
-        $this->app = new App();
+        $this->app = new App($this->container);
         $this->app->run();
     }
 
@@ -123,7 +122,7 @@ class AppTest extends Unit
         $this->tester->sendMessage('test');
         $data = $this->tester->getVkMessageData();
         $data->type = 'unsupported';
-        $this->app = $this->make(new App(), [
+        $this->app = $this->make(new App($this->container), [
             'init' => new VkDto(1, $data, 'test')
         ]);
         $this->app->run();

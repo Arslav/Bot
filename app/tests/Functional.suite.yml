@@ -5,4 +5,4 @@ modules:
         - Codeception\Module\Cli
         - Asserts
         - Doctrine2:
-            depends: \Tests\Support\Modules\DatabaseMigration
+            depends: \Tests\Support\Modules\Database

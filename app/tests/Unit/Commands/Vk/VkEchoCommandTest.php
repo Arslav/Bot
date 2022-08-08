@@ -4,7 +4,7 @@ namespace Tests\Unit\Commands\Vk;
 use Arslav\Newbot\Commands\Vk\EchoCommand;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
-use ContainerBuilder;
+use Arslav\Newbot\App;
 use DigitalStar\vk_api\vk_api;
 use DigitalStar\vk_api\VkApiException;
 use Exception;
@@ -23,7 +23,7 @@ class VkEchoCommandTest extends Unit
      */
     protected function setUp(): void
     {
-        $container = ContainerBuilder::build();
+        $container = App::getContainer();
         $container->set(vk_api::class, $this->constructEmpty(
             vk_api::class,
             [null, null],
