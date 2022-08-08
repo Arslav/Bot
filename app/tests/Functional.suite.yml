@@ -1,8 +1,0 @@
-actor: FunctionalTester
-suite_namespace: Tests\Functional
-modules:
-    enabled:
-        - Codeception\Module\Cli
-        - Asserts
-        - Doctrine2:
-            depends: \Tests\Support\Modules\Database

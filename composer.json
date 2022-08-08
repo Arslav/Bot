@@ -1,7 +1,7 @@
 {
     "name": "arslav/newbot",
-    "description": "New version vk bot",
-    "type": "project",
+    "description": "New version vk bot framework",
+    "type": "library",
     "autoload": {
         "psr-4": {
             "Arslav\\Newbot\\": "src/"
