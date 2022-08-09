@@ -25,7 +25,8 @@
         "symfony/maker-bundle": "^1.45",
         "doctrine/annotations": "^1.13",
         "doctrine/migrations": "^3.5",
-        "symfony/orm-pack": "^2.2"
+        "symfony/orm-pack": "^2.2",
+        "psr/container": "^1.0"
     },
     "require-dev": {
         "php-di/php-di": "^6.3",
