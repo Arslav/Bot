@@ -25,7 +25,7 @@ jobs:
         push: true
         tags: registry.knaaru.ru/bot:latest, registry.knaaru.ru/bot:${{ github.sha }}
     - name: Run Tests
-    - uses: addnab/docker-run-action@v3
+      uses: addnab/docker-run-action@v3
       with: 
         image: registry.knaaru.ru/bot:latest
         run: vendor/bin/codecept run
