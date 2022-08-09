@@ -24,13 +24,10 @@ jobs:
         context: .
         push: true
         tags: registry.knaaru.ru/bot:latest, registry.knaaru.ru/bot:${{ github.sha }}
-    - name: Composer Install
+    - name: Composer Install & Run Tests
       uses: addnab/docker-run-action@v3
       with: 
         image: registry.knaaru.ru/bot:latest
-        run: composer install --no-interaction
-    - name: Run Tests
-      uses: addnab/docker-run-action@v3
-      with: 
-        image: registry.knaaru.ru/bot:latest
-        run: vendor/bin/codecept run
+        run: |
+          composer install --no-interaction
+          vendor/bin/codecept run
