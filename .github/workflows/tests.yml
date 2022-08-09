@@ -1,4 +1,4 @@
-name: Run Tests
+name: Build & Run Tests
 
 on:
   push:
@@ -10,8 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Login registry
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Login Registry
       uses: docker/login-action@v2
       with:
         registry: registry.knaaru.ru
@@ -23,7 +24,7 @@ jobs:
         context: .
         push: true
         tags: registry.knaaru.ru/bot:latest, registry.knaaru.ru/bot:${{ github.sha }}
-    - name: Run tests
+    - name: Run Tests
     - uses: addnab/docker-run-action@v3
       with: 
         image: registry.knaaru.ru/bot:latest
