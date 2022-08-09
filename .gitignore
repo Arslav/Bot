@@ -1,5 +1,6 @@
 /.idea
 /.vscode
-/app/vendor/
+/vendor/
 .env
 docker-compose.local.yml
+composer.lock
