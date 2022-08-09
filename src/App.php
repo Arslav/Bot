@@ -1,9 +1,9 @@
 <?php
 
-namespace Arslav\Newbot;
+namespace Arslav\Bot;
 
-use Arslav\Newbot\Commands\Vk\Base\VkCommand;
-use Arslav\Newbot\DTO\VkDto;
+use Arslav\Bot\Commands\Vk\Base\VkCommand;
+use Arslav\Bot\DTO\VkDto;
 use DI\Container;
 use DigitalStar\vk_api\vk_api;
 use Doctrine\ORM\EntityManager;

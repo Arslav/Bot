@@ -1,8 +1,8 @@
 <?php
 
-namespace Arslav\Newbot\Commands\Vk\Base;
+namespace Arslav\Bot\Commands\Vk\Base;
 
-use Arslav\Newbot\Commands\Command;
+use Arslav\Bot\Commands\Command;
 
 abstract class VkCommand extends Command
 {

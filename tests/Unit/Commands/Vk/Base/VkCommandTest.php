@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Commands\Vk\Base;
 
-use Arslav\Newbot\Commands\Vk\Base\VkCommand;
+use Arslav\Bot\Commands\Vk\Base\VkCommand;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use Exception;

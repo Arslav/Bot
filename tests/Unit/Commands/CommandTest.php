@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Commands;
 
-use Arslav\Newbot\Commands\Command;
+use Arslav\Bot\Commands\Command;
 use Codeception\Test\Unit;
 use Exception;
 

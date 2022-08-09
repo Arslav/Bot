@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
-use Arslav\Newbot\Cli;
-use Arslav\Newbot\Commands\Cli\Base\CliCommand;
+use Arslav\Bot\Cli;
+use Arslav\Bot\Commands\Cli\Base\CliCommand;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
-use Arslav\Newbot\App;
+use Arslav\Bot\App;
 use DI\Container;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;

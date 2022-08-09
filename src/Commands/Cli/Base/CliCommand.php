@@ -1,8 +1,8 @@
 <?php
 
-namespace Arslav\Newbot\Commands\Cli\Base;
+namespace Arslav\Bot\Commands\Cli\Base;
 
-use Arslav\Newbot\Commands\Command;
+use Arslav\Bot\Commands\Command;
 use ReflectionClass;
 
 /**

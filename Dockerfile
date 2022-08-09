@@ -15,12 +15,13 @@ RUN apt-get update && \
                        libxrender1 \
                        libxtst6 && \
     apt-get clean && \
-        apt-get autoclean && \
-        apt-get autoremove -y --force-yes && \
-        rm -rf /var/lib/apt/lists/*
+    apt-get autoclean && \
+    apt-get autoremove -y --force-yes && \
+    rm -rf /var/lib/apt/lists/*
 
 #install php extentions
-RUN docker-php-ext-configure gd --with-jpeg=/usr/lib64 && \
+RUN pecl install xdebug && \
+    docker-php-ext-configure gd --with-jpeg=/usr/lib64 && \
     docker-php-ext-install zip \
                            pdo \
                            pdo_pgsql \
@@ -28,9 +29,15 @@ RUN docker-php-ext-configure gd --with-jpeg=/usr/lib64 && \
                            gd \
                            xsl && \
     docker-php-ext-enable zip \
-                          gd
+                          xdebug
 
 COPY . /web/app/
+
+RUN echo 'xdebug.mode=debug,coverage' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo 'xdebug.client_host=host.docker.internal' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo 'xdebug.client_port=9015' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo 'xdebug.start_with_request=yes' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo 'session.save_path = "/tmp"' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 #composer installation
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet

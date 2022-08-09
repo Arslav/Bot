@@ -1,9 +1,9 @@
 <?php
 
-namespace Arslav\Newbot\Commands\Cli;
+namespace Arslav\Bot\Commands\Cli;
 
-use Arslav\Newbot\Cli;
-use Arslav\Newbot\Commands\Cli\Base\CliCommand;
+use Arslav\Bot\Cli;
+use Arslav\Bot\Commands\Cli\Base\CliCommand;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;

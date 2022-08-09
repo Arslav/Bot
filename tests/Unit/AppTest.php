@@ -2,21 +2,19 @@
 
 namespace Tests\Unit;
 
-use Arslav\Newbot\App;
-use Arslav\Newbot\Commands\Vk\Base\VkCommand;
-use Arslav\Newbot\DTO\VkDto;
+use Arslav\Bot\App;
+use Arslav\Bot\Commands\Vk\Base\VkCommand;
+use Arslav\Bot\DTO\VkDto;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use DI\Container;
 use DigitalStar\vk_api\vk_api;
-use Doctrine\ORM\Cache\EntityCacheEntry;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use stdClass;
 use Tests\Support\UnitTester;
 
 class AppTest extends Unit

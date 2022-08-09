@@ -1,6 +1,6 @@
 <?php
 
-use Arslav\Newbot\App;
+use Arslav\Bot\App;
 use DI\Container;
 
 $container = new Container();

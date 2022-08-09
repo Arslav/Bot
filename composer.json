@@ -1,10 +1,16 @@
 {
-    "name": "arslav/newbot",
+    "name": "arslav/bot",
     "description": "New version vk bot framework",
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Arslav\\Newbot\\": "src/"
+            "Arslav\\Bot\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "Tests\\Unit\\": "tests/Unit"
         }
     },
     "authors": [
@@ -14,19 +20,20 @@
         }
     ],
     "require": {
-        "php-di/php-di": "^6.3",
-        "monolog/monolog": "^3.0",
-        "nesbot/carbon": "^2.57",
+        "php": ">=8.1",
         "digitalstars/simplevk": "^2.14",
         "symfony/maker-bundle": "^1.45",
         "doctrine/annotations": "^1.13",
         "doctrine/migrations": "^3.5",
-        "symfony/orm-pack": "^2.2",
+        "symfony/orm-pack": "^2.2"
+    },
+    "require-dev": {
+        "php-di/php-di": "^6.3",
+        "doctrine/data-fixtures": "^1.5",
+        "codeception/module-cli": "^2.0",
         "codeception/codeception": "^5.0",
         "codeception/module-phpbrowser": "^3.0.0",
         "codeception/module-asserts": "^3.0.0",
-        "codeception/module-doctrine2": "^3.0",
-        "doctrine/data-fixtures": "^1.5",
-        "codeception/module-cli": "^2.0"
+        "codeception/module-doctrine2": "^3.0"
     }
 }

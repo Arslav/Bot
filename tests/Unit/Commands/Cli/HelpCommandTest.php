@@ -3,9 +3,9 @@
 
 namespace Tests\Unit\Commands\Cli;
 
-use Arslav\Newbot\App;
-use Arslav\Newbot\Commands\Cli\Base\CliCommand;
-use Arslav\Newbot\Commands\Cli\HelpCommand;
+use Arslav\Bot\App;
+use Arslav\Bot\Commands\Cli\Base\CliCommand;
+use Arslav\Bot\Commands\Cli\HelpCommand;
 use Codeception\Test\Unit;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;

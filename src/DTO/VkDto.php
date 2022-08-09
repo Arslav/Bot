@@ -1,6 +1,6 @@
 <?php
 
-namespace Arslav\Newbot\DTO;
+namespace Arslav\Bot\DTO;
 
 class VkDto
 {

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Commands\Cli\Base;
 
-use Arslav\Newbot\Commands\Cli\Base\CliCommand;
+use Arslav\Bot\Commands\Cli\Base\CliCommand;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use Exception;

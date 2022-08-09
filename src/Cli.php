@@ -1,9 +1,9 @@
 <?php
 
-namespace Arslav\Newbot;
+namespace Arslav\Bot;
 
-use Arslav\Newbot\Commands\Cli\Base\CliCommand;
-use Arslav\Newbot\Commands\Cli\HelpCommand;
+use Arslav\Bot\Commands\Cli\Base\CliCommand;
+use Arslav\Bot\Commands\Cli\HelpCommand;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;

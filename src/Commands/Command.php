@@ -1,6 +1,6 @@
 <?php
 
-namespace Arslav\Newbot\Commands;
+namespace Arslav\Bot\Commands;
 
 
 abstract class Command
