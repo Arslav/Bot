@@ -1,5 +1,11 @@
-docker build -t newbot .
+# Фреймворк для разрабоки ботов
 
-docker run --rm -it -v $(pwd):/web/app newbot composer install
+В разработке...
 
-docker run --rm -it -v $(pwd):/web/app newbot vendor/bin/codecept run
+Для локальной разработки фреймворка можно использовать след. команды
+
+```docker build -t bot .```
+
+```docker run --rm -it -v $(pwd):/web/app bot composer install```
+
+```docker run --rm -it -v $(pwd):/web/app bot vendor/bin/codecept run```
