@@ -1,0 +1,16 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag registrybot:latest && docker run --rm -it registrybot:latest vendor/bin/codecept run
+  
