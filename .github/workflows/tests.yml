@@ -12,12 +12,22 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Login Registry
+      uses: docker/login-action@v2
+      with:
+        registry: registry.knaaru.ru
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - name: Create Dockerfile
+      run: |
+        echo "FROM registry.knaaru.ru/knaaru-bot/php:latest" >> Dockerfile
+        echo "COPY ./ ." >> Dockerfile
     - name: Build
       uses: docker/build-push-action@v3
       with:
         context: .
         push: false
-        tags: registry.knaaru.ru/bot:latest, registry.knaaru.ru/bot:${{ github.sha }}
+        tags: registry.knaaru.ru/bot:latest
     - name: Composer Install & Run Tests
       uses: addnab/docker-run-action@v3
       with: 
