@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Arslav\Bot\Cli;
 use Arslav\Bot\Commands\Cli\Base\CliCommand;
+use Codeception\Stub;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use Arslav\Bot\App;
@@ -11,7 +12,6 @@ use DI\Container;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Psr\Log\LoggerInterface;
 
 class CliTest extends Unit
 {
@@ -21,11 +21,14 @@ class CliTest extends Unit
     protected function setUp(): void
     {
         $this->container = App::getContainer();
-        $this->container->set(LoggerInterface::class, $this->constructEmpty(LoggerInterface::class));
         parent::setUp();
     }
 
     /**
+     * @param array $aliases
+     * @param array $args
+     * @param bool $expectRun
+     *
      * @return void
      *
      * @throws ContainerExceptionInterface
@@ -34,7 +37,7 @@ class CliTest extends Unit
      *
      * @dataProvider commandProvider
      */
-    public function testRun(array $aliases, array $args, bool $expectRun)
+    public function testRun(array $aliases, array $args, bool $expectRun): void
     {
         $command = $this->construct(
             CliCommand::class,
@@ -60,5 +63,30 @@ class CliTest extends Unit
             [['command'], ['arg1', 'arg2'], false],
             [['command'], [], false]
         ];
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     */
+    public function testRunWithError(): void
+    {
+        $app = new Cli($this->container, array_merge(['./bin/console', 'test']));
+        Cli::getContainer()->set('cli-commands', [
+            $this->construct(CliCommand::class, [['test']], [
+                'run' => function() {
+                    throw new Exception('test exception');
+                }
+            ]),
+        ]);
+        Stub::update(Cli::getLogger(), [
+            'error' => Expected::once(),
+        ]);
+        try {
+            $app->run();
+        } catch (Exception $e) {
+            $this->assertSame('test exception', $e->getMessage());
+        }
     }
 }

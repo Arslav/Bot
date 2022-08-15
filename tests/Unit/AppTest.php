@@ -4,10 +4,9 @@ namespace Tests\Unit;
 
 use Arslav\Bot\App;
 use Arslav\Bot\Commands\Vk\Base\VkCommand;
-use Arslav\Bot\DTO\VkDto;
+use Codeception\Stub;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
-use DI\Container;
 use DigitalStar\vk_api\vk_api;
 use Doctrine\ORM\EntityManager;
 use Exception;
@@ -19,10 +18,6 @@ use Tests\Support\UnitTester;
 
 class AppTest extends Unit
 {
-    protected App $app;
-
-    protected ?Container $container;
-
     protected UnitTester $tester;
 
     /**
@@ -32,20 +27,14 @@ class AppTest extends Unit
      */
     protected function setUp(): void
     {
-        $this->container = App::getContainer();
-        $this->container->set(LoggerInterface::class, $this->constructEmpty(LoggerInterface::class));
-        $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
-            'initVars' => function(&$id, &$message){
-                $id = $this->tester->getVkMessageData()->object->peer_id;
-                $message = $this->tester->getVkMessageData()->object->text;
-                return $this->tester->getVkMessageData();
-            }
-        ]));
-        $this->app = new App($this->container);
         parent::setUp();
     }
 
     /**
+     * @param string $message
+     * @param array $commandAliases
+     * @param array $args
+     *
      * @return void
      *
      * @throws ContainerExceptionInterface
@@ -54,16 +43,16 @@ class AppTest extends Unit
      *
      * @dataProvider messageProvider
      */
-    public function testSetArgs(string $message, array $commandAliases, array $args)
+    public function testSetArgs(string $message, array $commandAliases, array $args): void
     {
         $command = $this->construct(
             VkCommand::class,
             [$commandAliases],
             ['run' => null]
         );
-        $this->container->set('vk-commands', [$command]);
+        App::getContainer()->set('vk-commands', [$command]);
         $this->tester->sendMessage($message);
-        $this->app->run();
+        App::getInstance()->run();
         $this->assertSame($args, $command->args);
     }
 
@@ -74,8 +63,7 @@ class AppTest extends Unit
      */
     public function testGetEntityManager()
     {
-        $this->container->set(EntityManager::class, $this->makeEmpty(EntityManager::class));
-        $this->app = new App($this->container);
+        App::getContainer()->set(EntityManager::class, $this->makeEmpty(EntityManager::class));
         $this->assertInstanceOf(EntityManager::class, App::getEntityManager());
     }
 
@@ -94,7 +82,7 @@ class AppTest extends Unit
      */
     public function testRun()
     {
-        $this->app->run();
+        App::getInstance()->run();
     }
 
     /**
@@ -103,13 +91,9 @@ class AppTest extends Unit
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testRunWithoutMessage()
+    public function testRunWithoutMessage(): void
     {
-        $this->container->set(vk_api::class, $this->constructEmpty(vk_api::class, [null, null], [
-            'initVars' => null
-        ]));
-        $this->app = new App($this->container);
-        $this->app->run();
+        App::getInstance()->run();
     }
 
     /**
@@ -119,15 +103,15 @@ class AppTest extends Unit
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function testRunUnsupportedMessage()
+    public function testRunUnsupportedMessage(): void
     {
         $this->tester->sendMessage('test');
         $data = $this->tester->getVkMessageData();
         $data->type = 'unsupported';
-        $this->app = $this->make(new App($this->container), [
-            'init' => new VkDto(1, $data, 'test')
+        $app = $this->make(new App(App::getContainer()), [
+            'init' => $data,
         ]);
-        $this->app->run();
+        $app->run();
     }
 
     /**
@@ -135,15 +119,15 @@ class AppTest extends Unit
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function testRunWithCommand()
+    public function testRunWithCommand(): void
     {
-        $this->container->set('vk-commands', [
+        App::getContainer()->set('vk-commands', [
             $this->construct(VkCommand::class, [['test']], ['run' => Expected::once()]),
             $this->construct(VkCommand::class, [['test2']], ['run' => Expected::never()]),
             $this->construct(VkCommand::class, [['test3']], ['run' => Expected::never()]),
         ]);
         $this->tester->sendMessage('test');
-        $this->app->run();
+        App::getInstance()->run();
     }
 
     /**
@@ -152,7 +136,7 @@ class AppTest extends Unit
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testGetLogger()
+    public function testGetLogger(): void
     {
         $this->assertInstanceOf(LoggerInterface::class, App::getLogger());
     }
@@ -160,7 +144,7 @@ class AppTest extends Unit
     /**
      * @return void
      */
-    public function testGetContainer()
+    public function testGetContainer(): void
     {
         $this->assertInstanceOf(ContainerInterface::class, App::getContainer());
     }
@@ -178,5 +162,30 @@ class AppTest extends Unit
             ['command value1 value2 value3', ['command <args>'], ['value1', 'value2', 'value3']],
             ['some text', ['command <args>'], []],
         ];
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     */
+    public function testRunWithError(): void
+    {
+        Stub::update(App::getLogger(), [
+            'error' => Expected::once(),
+        ]);
+        App::getContainer()->set('vk-commands', [
+            $this->construct(VkCommand::class, [['test']], [
+                'run' => function() {
+                    throw new Exception('test exception');
+                }
+            ]),
+        ]);
+        $this->tester->sendMessage('test');
+        try {
+            App::getInstance()->run();
+        } catch (Exception $e) {
+            $this->assertSame('test exception', $e->getMessage());
+        }
     }
 }

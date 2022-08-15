@@ -10,7 +10,7 @@ use stdClass;
 class Message extends Module
 {
     //TODO: Переписать на DTO
-    static stdClass $vkMessageData;
+    static ?stdClass $vkMessageData = null;
 
     public function sendMessage(string $message)
     {
@@ -29,7 +29,7 @@ class Message extends Module
     /**
      * @return stdClass
      */
-    public function getVkMessageData(): stdClass
+    public static function getVkMessageData(): stdClass
     {
         return self::$vkMessageData;
     }

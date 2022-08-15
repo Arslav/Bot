@@ -8,4 +8,5 @@ modules:
         - Codeception\Module\Cli
         - \Tests\Support\Helper\Message
         - Asserts
+        - \Tests\Support\Module\Stub
 step_decorators: ~

@@ -41,26 +41,33 @@ class Cli extends App
         self::getLogger()->info('Launched from CLI');
         self::getLogger()->debug('Args: ' . print_r($this->args, true));
 
-        /** @var CliCommand $command */
-        $commands = self::getContainer()->get('cli-commands');
-        $helpCommand =  new HelpCommand();
-        $commands[] = $helpCommand;
+        try {
+            /** @var CliCommand $command */
+            $commands = self::getContainer()->get('cli-commands');
+            $helpCommand = new HelpCommand();
+            $commands[] = $helpCommand;
 
-        foreach ($commands as $command) {
-            if (in_array($this->commandAlias, $command->aliases)) {
-                self::getLogger()->info('Command detected: ' . get_class($command));
-                if ($command->beforeAction()) {
-                    if ($this->args) {
-                        $command->setArgs($this->args);
+            foreach ($commands as $command) {
+                if (in_array($this->commandAlias, $command->aliases)) {
+                    self::getLogger()->info('Command detected: ' . get_class($command));
+                    if ($command->beforeAction()) {
+                        if ($this->args) {
+                            $command->setArgs($this->args);
+                        }
+
+                        $command->run();
+                        return;
                     }
-
-                    $command->run();
-                    return;
                 }
             }
-        }
-        echo "Ошибка! Команда {$this->commandAlias} не распознана!" . PHP_EOL . PHP_EOL;
+            echo "Ошибка! Команда $this->commandAlias не распознана!" . PHP_EOL . PHP_EOL;
 
-        $helpCommand->run();
+            $helpCommand->run();
+        } catch (Exception $e) {
+            App::getLogger()->error($e->getMessage(), $e->getTrace());
+            throw $e;
+        } finally {
+            App::getLogger()->info('App end');
+        }
     }
 }

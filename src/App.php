@@ -16,6 +16,15 @@ use Psr\Log\LoggerInterface;
 class App
 {
     protected static ContainerInterface $container;
+    protected static App $instance;
+
+    /**
+     * @return App
+     */
+    public static function getInstance(): App
+    {
+        return self::$instance;
+    }
 
     /**
      * @return vk_api
@@ -67,6 +76,7 @@ class App
     public function __construct(ContainerInterface $container)
     {
         self::$container = $container;
+        self::$instance = $this;
     }
 
     /**
@@ -78,35 +88,40 @@ class App
      */
     public function run() : void
     {
-        $vkDto = $this->init();
-        if($vkDto == null) {
-            self::getLogger()->info('No data received');
+        try {
+            $data = $this->init();
+            if($data == null) {
+                self::getLogger()->info('No data received');
+                return;
+            }
+            //TODO: Разделить команды по типу триггеров! message_new и т.д.!!!
+            if ($data->type != 'message_new') {
+                self::getLogger()->error('Unsupported type');
+                return;
+            }
 
-            return;
-        }
-        //TODO: Разделить команды по типу триггеров! message_new и т.д.!!!
-        if ($vkDto->data->type != 'message_new') {
-            self::getLogger()->error('Unsupported type');
+            self::getLogger()->info('New message: '. print_r($data->object->text, true));
 
-            return;
-        }
-
-        self::getLogger()->info('New message: '. print_r($vkDto->message, true));
-        /** @var VkCommand $command */
-        $commands = self::getContainer()->get('vk-commands');
-        foreach ($commands as $command) {
-            foreach ($command->aliases as $alias) {
-                $regex = $this->getRegex($alias);
-                if (preg_match($regex, $vkDto->message, $matches)) {
-                    if (isset($matches['args'])) {
-                        $args = $this->prepareArgs($matches['args']);
-                        $command->setArgs($args);
+            /** @var VkCommand $command */
+            $commands = self::getContainer()->get('vk-commands');
+            foreach ($commands as $command) {
+                foreach ($command->aliases as $alias) {
+                    $regex = $this->getRegex($alias);
+                    if (preg_match($regex, $data->object->text, $matches)) {
+                        if (isset($matches['args'])) {
+                            $args = $this->prepareArgs($matches['args']);
+                            $command->setArgs($args);
+                        }
+                        $this->runCommand($command, $data);
+                        return;
                     }
-                    $this->runCommand($command, $vkDto->data);
-
-                    return;
                 }
             }
+        } catch (Exception $e) {
+            App::getLogger()->error($e->getMessage(), $e->getTrace());
+            throw $e;
+        } finally {
+            App::getLogger()->info('App end');
         }
     }
 
@@ -164,15 +179,15 @@ class App
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function init(): ?VkDto
+    protected function init(): ?object
     {
         self::getLogger()->info('App started');
         self::getLogger()->info('Launched from VK');
-        $data = self::getVk()->initVars($id, $message);
+        $data = self::getVk()->initVars();
         self::getLogger()->debug('Received data: ' . print_r($data, true));
 
         if ($data) {
-            return new VkDto($id, $data, $message);
+            return $data;
         }
 
         return null;
