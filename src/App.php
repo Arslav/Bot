@@ -174,7 +174,7 @@ class App
     }
 
     /**
-     * @return VkDto|null
+     * @return object|null
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
