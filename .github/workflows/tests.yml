@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - name: Create Dockerfile
       run: |
-        echo "FROM registry.knaaru.ru/knaaru-bot/php:latest" >> Dockerfile
+        echo "FROM registry.knaaru.ru/bot/php:latest" > Dockerfile
         echo "COPY ./ ." >> Dockerfile
     - name: Build
       uses: docker/build-push-action@v3
