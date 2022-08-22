@@ -6,7 +6,7 @@ actor: UnitTester
 modules:
     enabled:
         - Codeception\Module\Cli
-        - \Tests\Support\Helper\Message
+        - \Arslav\Bot\Tests\Helpers\VkChatHelper
         - Asserts
         - \Tests\Support\Module\Stub
 step_decorators: ~

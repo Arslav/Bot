@@ -19,7 +19,7 @@ class VkCommandTest extends Unit
      */
     public function testRun()
     {
-        $this->tester->sendMessage('test');
+        $this->tester->sendVkMessage('test');
         $command = $this->construct(
             VkCommand::class,
             [['test']],
@@ -36,7 +36,7 @@ class VkCommandTest extends Unit
      */
     public function testInit()
     {
-        $this->tester->sendMessage('test');
+        $this->tester->sendVkMessage('test');
         $command = $this->construct(
             VkCommand::class,
             [['test']],
@@ -59,7 +59,7 @@ class VkCommandTest extends Unit
      */
     public function testIsFromChat(int $peer_id, bool $expected)
     {
-        $this->tester->sendMessage('test');
+        $this->tester->sendVkMessage('test');
         $data = $this->tester->getVkMessageData();
         $data->object->peer_id = $peer_id;
         $command = $this->construct(

@@ -3,13 +3,14 @@
 namespace Tests\Support\Module;
 
 use Arslav\Bot\App;
+use Arslav\Bot\Tests\Factories\VkApiMockFactory;
+use Arslav\Bot\Tests\Helpers\VkChatHelper;
 use Codeception\Module;
 use Codeception\Stub as CodeceptionStub;
 use Codeception\TestInterface;
 use DigitalStar\vk_api\vk_api;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
-use Tests\Support\Helper\Message;
 
 class Stub extends Module
 {
@@ -24,11 +25,7 @@ class Stub extends Module
     {
         $container = App::getContainer();
         $container->set(LoggerInterface::class, CodeceptionStub::constructEmpty(LoggerInterface::class));
-        $container->set(vk_api::class, CodeceptionStub::constructEmpty(
-            vk_api::class,
-            [null, null],
-            ['initVars' => fn() => Message::getVkMessageData()],
-        ));
+        $container->set(vk_api::class, VkApiMockFactory::create());
 
         parent::_before($test);
     }

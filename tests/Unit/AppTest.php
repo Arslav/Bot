@@ -51,8 +51,8 @@ class AppTest extends Unit
             ['run' => null]
         );
         App::getContainer()->set('vk-commands', [$command]);
-        $this->tester->sendMessage($message);
-        App::getInstance()->run();
+        $this->tester->sendVkMessage($message);
+        $this->tester->waitVkResponse();
         $this->assertSame($args, $command->args);
     }
 
@@ -105,7 +105,7 @@ class AppTest extends Unit
      */
     public function testRunUnsupportedMessage(): void
     {
-        $this->tester->sendMessage('test');
+        $this->tester->sendVkMessage('test');
         $data = $this->tester->getVkMessageData();
         $data->type = 'unsupported';
         $app = $this->make(new App(App::getContainer()), [
@@ -126,8 +126,8 @@ class AppTest extends Unit
             $this->construct(VkCommand::class, [['test2']], ['run' => Expected::never()]),
             $this->construct(VkCommand::class, [['test3']], ['run' => Expected::never()]),
         ]);
-        $this->tester->sendMessage('test');
-        App::getInstance()->run();
+        $this->tester->sendVkMessage('test');
+        $this->tester->waitVkResponse();
     }
 
     /**
@@ -181,9 +181,9 @@ class AppTest extends Unit
                 }
             ]),
         ]);
-        $this->tester->sendMessage('test');
+        $this->tester->sendVkMessage('test');
         try {
-            App::getInstance()->run();
+            $this->tester->waitVkResponse();
         } catch (Exception $e) {
             $this->assertSame('test exception', $e->getMessage());
         }
