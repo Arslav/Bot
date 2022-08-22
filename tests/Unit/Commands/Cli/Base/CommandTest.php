@@ -14,7 +14,7 @@ class CommandTest extends Unit
      *
      * @throws Exception
      */
-    public function testRun()
+    public function testRun(): void
     {
         $command = $this->construct(
             CliCommand::class,

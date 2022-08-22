@@ -20,7 +20,7 @@ class HelpCommandTest extends Unit
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function testRun()
+    public function testRun(): void
     {
         $container = App::getContainer();
         $container->set('cli-commands', [

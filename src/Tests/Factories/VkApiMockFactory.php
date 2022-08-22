@@ -19,7 +19,13 @@ class VkApiMockFactory
             vk_api::class,
             [null, null],
             [
-                'initVars' => fn() => VkChatHelper::getVkMessageData()
+                'initVars' => fn() => VkChatHelper::getVkMessageData(),
+                'reply' => function($msg) {
+                    VkChatHelper::$botMessage = $msg;
+                },
+                'sendImage' => function() {
+                    VkChatHelper::$botImage = true;
+                }
             ],
         );
     }

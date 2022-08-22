@@ -26,7 +26,7 @@ class CommandTest extends Unit
     /**
      * @return void
      */
-    public function testBeforeAction()
+    public function testBeforeAction(): void
     {
         $this->assertSame(true, $this->command->beforeAction());
     }
@@ -34,7 +34,7 @@ class CommandTest extends Unit
     /**
      * @return void
      */
-    public function testSetArgs()
+    public function testSetArgs(): void
     {
         $value = ['test1', 'test2'];
         $this->command->setArgs($value);

@@ -77,10 +77,12 @@ class AppTest extends Unit
     }
 
     /**
+     * @return void
+     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testRun()
+    public function testRun(): void
     {
         App::getInstance()->run();
     }
@@ -115,8 +117,8 @@ class AppTest extends Unit
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @return void
+     *
      * @throws Exception
      */
     public function testRunWithCommand(): void

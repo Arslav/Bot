@@ -12,8 +12,9 @@ use stdClass;
 
 class VkChatHelper extends Module
 {
-    protected static string $message;
-    protected static ?string $botMessage = null;
+    public static string $message;
+    public static ?string $botMessage = null;
+    public static bool $botImage = false;
     public static int $from_id = 1;
     public static int $peer_id = 1;
     public static string $type = 'message_new';
@@ -47,6 +48,15 @@ class VkChatHelper extends Module
     public function grabVkBotMessage(): ?string
     {
         return self::$botMessage;
+    }
+
+
+    /**
+     * @return void
+     */
+    public function seeVkBotImage(): void
+    {
+        $this->assertTrue(self::$botImage);
     }
 
     /**

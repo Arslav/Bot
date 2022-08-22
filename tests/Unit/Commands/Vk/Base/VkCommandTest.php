@@ -17,7 +17,7 @@ class VkCommandTest extends Unit
      *
      * @throws Exception
      */
-    public function testRun()
+    public function testRun(): void
     {
         $this->tester->sendVkMessage('test');
         $command = $this->construct(
@@ -34,7 +34,7 @@ class VkCommandTest extends Unit
      *
      * @throws Exception
      */
-    public function testInit()
+    public function testInit(): void
     {
         $this->tester->sendVkMessage('test');
         $command = $this->construct(
