@@ -1,8 +1,10 @@
 <?php
 
-use Arslav\Bot\App;
+use Arslav\Bot\BaseApp;
+use Codeception\Stub;
 use DI\Container;
 
 $container = new Container();
 
-new App($container);
+Stub::construct(BaseApp::class, [$container], ['run' => function () {}]);
+

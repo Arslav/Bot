@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Arslav\Bot\Tests\Helpers;
 
-use Arslav\Bot\App;
+use Arslav\Bot\BaseApp;
+use Arslav\Bot\Vk\App;
 use Codeception\Module;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -12,14 +13,12 @@ use stdClass;
 
 class VkChatHelper extends Module
 {
-    public static string $message;
+    public static ?string $message = null;
     public static ?string $botMessage = null;
     public static bool $botImage = false;
-    public static int $from_id = 1;
-    public static int $peer_id = 1;
+    public static int $fromId = 1;
+    public static int $peerId = 1;
     public static string $type = 'message_new';
-
-    static ?stdClass $vkMessageData = null;
 
     /**
      * @param string $message
@@ -39,7 +38,7 @@ class VkChatHelper extends Module
      */
     public function waitVkResponse(): void
     {
-        App::getInstance()->run();
+        (new App(BaseApp::getContainer()))->run();
     }
 
     /**
@@ -60,20 +59,36 @@ class VkChatHelper extends Module
     }
 
     /**
-     * @return stdClass
+     * @return ?stdClass
      */
-    public static function getVkMessageData(): stdClass
+    public static function getVkMessageData(): ?stdClass
     {
+        if (!self::$message) {
+            return null;
+        }
         //TODO: Переписать на DTO
         $dataArray = [
             'object' => [
-                'peer_id' => self::$from_id,
+                'peer_id' => self::$fromId,
                 'text' => self::$message,
                 'payload' => [],
-                'from_id' => self::$peer_id,
+                'from_id' => self::$peerId,
             ],
             'type' => self::$type
         ];
         return json_decode(json_encode($dataArray), false);
+    }
+
+    /**
+     * @return void
+     */
+    public static function clearVkData(): void
+    {
+        self::$message = null;
+        self::$botMessage = null;
+        self::$botImage = false;
+        self::$fromId = 1;
+        self::$peerId = 1;
+        self::$type = 'message_new';
     }
 }

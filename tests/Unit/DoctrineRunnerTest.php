@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Arslav\Bot\App;
 use Arslav\Bot\DoctrineRunner;
+use Arslav\Bot\Vk\App;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use Doctrine\DBAL\Connection;

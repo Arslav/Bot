@@ -2,9 +2,8 @@
 
 namespace Tests\Support\Module;
 
-use Arslav\Bot\App;
 use Arslav\Bot\Tests\Factories\VkApiMockFactory;
-use Arslav\Bot\Tests\Helpers\VkChatHelper;
+use Arslav\Bot\Vk\App;
 use Codeception\Module;
 use Codeception\Stub as CodeceptionStub;
 use Codeception\TestInterface;

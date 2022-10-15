@@ -1,18 +1,16 @@
 <?php
 
-namespace Arslav\Bot;
+namespace Arslav\Bot\Cli;
 
-use Arslav\Bot\Commands\Cli\Base\CliCommand;
-use Arslav\Bot\Commands\Cli\HelpCommand;
+use Arslav\Bot\Vk\App as BaseApp;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class Cli extends App
+class App extends BaseApp
 {
     private ?array $args;
-
     private string $commandAlias;
 
     /**
@@ -42,7 +40,7 @@ class Cli extends App
         self::getLogger()->debug('Args: ' . print_r($this->args, true));
 
         try {
-            /** @var CliCommand $command */
+            /** @var Command $command */
             $commands = self::getContainer()->get('cli-commands');
             $helpCommand = new HelpCommand();
             $commands[] = $helpCommand;

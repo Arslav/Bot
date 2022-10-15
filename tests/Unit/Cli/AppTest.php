@@ -1,26 +1,25 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Cli;
 
-use Arslav\Bot\Cli;
-use Arslav\Bot\Commands\Cli\Base\CliCommand;
+use Arslav\Bot\BaseApp;
+use Arslav\Bot\Cli\App;
+use Arslav\Bot\Cli\Command;
 use Codeception\Stub;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
-use Arslav\Bot\App;
 use DI\Container;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class CliTest extends Unit
+class AppTest extends Unit
 {
-
     private ?Container $container;
 
     protected function setUp(): void
     {
-        $this->container = App::getContainer();
+        $this->container = BaseApp::getContainer();
         parent::setUp();
     }
 
@@ -40,12 +39,12 @@ class CliTest extends Unit
     public function testRun(array $aliases, array $args, bool $expectRun): void
     {
         $command = $this->construct(
-            CliCommand::class,
+            Command::class,
             [$aliases],
             ['run' => Expected::exactly((int) $expectRun)]
         );
         $this->container->set('cli-commands', [$command]);
-        $app = new Cli($this->container, array_merge(['./bin/console', 'test'], $args));
+        $app = new App($this->container, array_merge(['./bin/console', 'test'], $args));
         $app->run();
         if ($expectRun) {
             $this->assertSame($args, $command->args);
@@ -72,15 +71,15 @@ class CliTest extends Unit
      */
     public function testRunWithError(): void
     {
-        $app = new Cli($this->container, array_merge(['./bin/console', 'test']));
-        Cli::getContainer()->set('cli-commands', [
-            $this->construct(CliCommand::class, [['test']], [
+        $app = new App($this->container, array_merge(['./bin/console', 'test']));
+        App::getContainer()->set('cli-commands', [
+            $this->construct(Command::class, [['test']], [
                 'run' => function() {
                     throw new Exception('test exception');
                 }
             ]),
         ]);
-        Stub::update(Cli::getLogger(), [
+        Stub::update(App::getLogger(), [
             'error' => Expected::once(),
         ]);
         try {

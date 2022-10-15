@@ -15,15 +15,16 @@ class VkApiMockFactory
      */
     public static function create(): MockObject|vk_api
     {
+        VkChatHelper::clearVkData();
         return Stub::constructEmpty(
             vk_api::class,
             [null, null],
             [
                 'initVars' => fn() => VkChatHelper::getVkMessageData(),
-                'reply' => function($msg) {
+                'reply' => function ($msg) {
                     VkChatHelper::$botMessage = $msg;
                 },
-                'sendImage' => function() {
+                'sendImage' => function () {
                     VkChatHelper::$botImage = true;
                 }
             ],

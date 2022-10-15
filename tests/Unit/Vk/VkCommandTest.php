@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\Commands\Vk\Base;
+namespace Tests\Unit\Vk;
 
-use Arslav\Bot\Commands\Vk\Base\VkCommand;
+use Arslav\Bot\Vk\Command;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use Exception;
@@ -21,7 +21,7 @@ class VkCommandTest extends Unit
     {
         $this->tester->sendVkMessage('test');
         $command = $this->construct(
-            VkCommand::class,
+            Command::class,
             [['test']],
             ['run' => Expected::once()]
         );
@@ -38,16 +38,16 @@ class VkCommandTest extends Unit
     {
         $this->tester->sendVkMessage('test');
         $command = $this->construct(
-            VkCommand::class,
+            Command::class,
             [['test']],
             ['run' => Expected::never()]
         );
         $command->init($this->tester->getVkMessageData());
         $this->assertIsObject($command->data);
         $this->assertIsString($command->message);
-        $this->assertIsInt($command->peer_id);
-        $this->assertIsInt($command->from_id);
-        $this->assertNull($command->chat_id);
+        $this->assertIsInt($command->peerId);
+        $this->assertIsInt($command->fromId);
+        $this->assertNull($command->chatId);
     }
 
     /**
@@ -63,7 +63,7 @@ class VkCommandTest extends Unit
         $data = $this->tester->getVkMessageData();
         $data->object->peer_id = $peer_id;
         $command = $this->construct(
-            VkCommand::class,
+            Command::class,
             [['test']],
             ['run' => Expected::never()]
         );

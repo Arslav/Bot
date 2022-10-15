@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Tests\Unit\Commands\Cli;
+namespace Tests\Unit\Cli;
 
-use Arslav\Bot\App;
-use Arslav\Bot\Commands\Cli\Base\CliCommand;
-use Arslav\Bot\Commands\Cli\HelpCommand;
+use Arslav\Bot\Cli\Command;
+use Arslav\Bot\Cli\HelpCommand;
+use Arslav\Bot\Vk\App;
 use Codeception\Test\Unit;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -24,11 +24,11 @@ class HelpCommandTest extends Unit
     {
         $container = App::getContainer();
         $container->set('cli-commands', [
-            $this->constructEmpty(CliCommand::class, [['test']], ['run' => true]),
+            $this->constructEmpty(Command::class, [['test']], ['run' => true]),
             /**
              * Test
              */
-            new class(['command']) extends CliCommand {
+            new class(['command']) extends Command {
                 function run(): void
                 {
                     //Stub

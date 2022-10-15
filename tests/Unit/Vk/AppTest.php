@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Vk;
 
-use Arslav\Bot\App;
-use Arslav\Bot\Commands\Vk\Base\VkCommand;
+use Arslav\Bot\Vk\App;
+use Arslav\Bot\Vk\Command;
 use Codeception\Stub;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
@@ -21,24 +21,12 @@ class AppTest extends Unit
     protected UnitTester $tester;
 
     /**
-     * @return void
-     *
-     * @throws Exception
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    /**
      * @param string $message
      * @param array $commandAliases
      * @param array $args
      *
      * @return void
      *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      * @throws Exception
      *
      * @dataProvider messageProvider
@@ -46,7 +34,7 @@ class AppTest extends Unit
     public function testSetArgs(string $message, array $commandAliases, array $args): void
     {
         $command = $this->construct(
-            VkCommand::class,
+            Command::class,
             [$commandAliases],
             ['run' => null]
         );
@@ -54,17 +42,6 @@ class AppTest extends Unit
         $this->tester->sendVkMessage($message);
         $this->tester->waitVkResponse();
         $this->assertSame($args, $command->args);
-    }
-
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws Exception
-     */
-    public function testGetEntityManager()
-    {
-        App::getContainer()->set(EntityManager::class, $this->makeEmpty(EntityManager::class));
-        $this->assertInstanceOf(EntityManager::class, App::getEntityManager());
     }
 
     /**
@@ -78,20 +55,15 @@ class AppTest extends Unit
 
     /**
      * @return void
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     public function testRun(): void
     {
+        $this->tester->sendVkMessage('test');
         App::getInstance()->run();
     }
 
     /**
      * @return void
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     public function testRunWithoutMessage(): void
     {
@@ -124,32 +96,15 @@ class AppTest extends Unit
     public function testRunWithCommand(): void
     {
         App::getContainer()->set('vk-commands', [
-            $this->construct(VkCommand::class, [['test']], ['run' => Expected::once()]),
-            $this->construct(VkCommand::class, [['test2']], ['run' => Expected::never()]),
-            $this->construct(VkCommand::class, [['test3']], ['run' => Expected::never()]),
+            $this->construct(Command::class, [['test']], ['run' => Expected::once()]),
+            $this->construct(Command::class, [['test2']], ['run' => Expected::never()]),
+            $this->construct(Command::class, [['test3']], ['run' => Expected::never()]),
         ]);
         $this->tester->sendVkMessage('test');
         $this->tester->waitVkResponse();
     }
 
-    /**
-     * @return void
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public function testGetLogger(): void
-    {
-        $this->assertInstanceOf(LoggerInterface::class, App::getLogger());
-    }
 
-    /**
-     * @return void
-     */
-    public function testGetContainer(): void
-    {
-        $this->assertInstanceOf(ContainerInterface::class, App::getContainer());
-    }
 
     /**
      * @return array[]
@@ -177,7 +132,7 @@ class AppTest extends Unit
             'error' => Expected::once(),
         ]);
         App::getContainer()->set('vk-commands', [
-            $this->construct(VkCommand::class, [['test']], [
+            $this->construct(Command::class, [['test']], [
                 'run' => function() {
                     throw new Exception('test exception');
                 }

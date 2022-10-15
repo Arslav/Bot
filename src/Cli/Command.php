@@ -1,14 +1,11 @@
 <?php
 
-namespace Arslav\Bot\Commands\Cli\Base;
+namespace Arslav\Bot\Cli;
 
-use Arslav\Bot\Commands\Command;
+use Arslav\Bot\BaseCommand;
 use ReflectionClass;
 
-/**
- * @C
- */
-abstract class CliCommand extends Command
+abstract class Command extends BaseCommand
 {
     /**
      * @return void

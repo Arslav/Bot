@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\Commands\Cli\Base;
+namespace Tests\Unit\Cli;
 
-use Arslav\Bot\Commands\Cli\Base\CliCommand;
+use Arslav\Bot\Cli\Command;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use Exception;
@@ -17,7 +17,7 @@ class CommandTest extends Unit
     public function testRun(): void
     {
         $command = $this->construct(
-            CliCommand::class,
+            Command::class,
             [['test']],
             ['run' => Expected::once()]
         );
@@ -32,7 +32,7 @@ class CommandTest extends Unit
         /**
          * Test
          */
-        $command = new class(['test']) extends CliCommand {
+        $command = new class(['test']) extends Command {
             function run(): void
             {
                 //Stub
@@ -47,7 +47,7 @@ class CommandTest extends Unit
      */
     public function testGetNullDescription()
     {
-        $command = new class(['test']) extends CliCommand {
+        $command = new class(['test']) extends Command {
             function run(): void
             {
                 //Stub

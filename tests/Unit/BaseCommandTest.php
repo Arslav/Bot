@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Unit\Commands;
+namespace Tests\Unit;
 
-use Arslav\Bot\Commands\Command;
+use Arslav\Bot\BaseCommand;
 use Codeception\Test\Unit;
 use Exception;
 
-class CommandTest extends Unit
+class BaseCommandTest extends Unit
 {
-    private Command $command;
+    private BaseCommand $command;
 
     /**
      * @inheritDoc
@@ -17,7 +17,7 @@ class CommandTest extends Unit
     protected function setUp(): void
     {
         $this->command = $this->construct(
-            Command::class, [['test']],
+            BaseCommand::class, [['test']],
             ['run' => true],
         );
         parent::setUp();

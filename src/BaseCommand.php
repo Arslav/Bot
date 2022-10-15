@@ -1,12 +1,11 @@
 <?php
 
-namespace Arslav\Bot\Commands;
+namespace Arslav\Bot;
 
 
-abstract class Command
+abstract class BaseCommand
 {
     public array $aliases = [];
-
     public array $args = [];
 
     /**
@@ -37,5 +36,8 @@ abstract class Command
         $this->args = $args;
     }
 
-    public abstract function run(): void;
+    /**
+     * @return void
+     */
+    abstract public function run(): void;
 }

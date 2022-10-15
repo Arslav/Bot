@@ -1,17 +1,16 @@
 <?php
 
-namespace Arslav\Bot\Commands\Cli;
+namespace Arslav\Bot\Cli;
 
-use Arslav\Bot\Cli;
-use Arslav\Bot\Commands\Cli\Base\CliCommand;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class HelpCommand extends CliCommand
+class HelpCommand extends Command
 {
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         parent::__construct(['help', '-h', '--help']);
     }
@@ -25,13 +24,11 @@ class HelpCommand extends CliCommand
     public function run(): void
     {
         echo 'Доступные команды: ' . PHP_EOL;
-        $commands = Cli::getContainer()->get('cli-commands');
-        /** @var CliCommand $command */
-        foreach ($commands as $command)
-        {
+        $commands = App::getContainer()->get('cli-commands');
+        /** @var Command $command */
+        foreach ($commands as $command) {
             echo ' - ' . $command->aliases[0];
-            if ($description = $command->getDescription())
-            {
+            if ($description = $command->getDescription()) {
                 echo ' - ' . $description;
             }
             echo PHP_EOL;
