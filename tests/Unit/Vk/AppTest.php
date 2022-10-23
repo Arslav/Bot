@@ -2,18 +2,16 @@
 
 namespace Tests\Unit\Vk;
 
+use Throwable;
 use Arslav\Bot\Vk\App;
 use Arslav\Bot\Vk\Command;
 use Codeception\Stub;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
 use DigitalStar\vk_api\vk_api;
-use Doctrine\ORM\EntityManager;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Psr\Log\LoggerInterface;
 use Tests\Support\UnitTester;
 
 class AppTest extends Unit
@@ -55,6 +53,9 @@ class AppTest extends Unit
 
     /**
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Throwable
      */
     public function testRun(): void
     {
@@ -64,6 +65,9 @@ class AppTest extends Unit
 
     /**
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Throwable
      */
     public function testRunWithoutMessage(): void
     {
@@ -75,7 +79,7 @@ class AppTest extends Unit
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws Exception
+     * @throws Throwable
      */
     public function testRunUnsupportedMessage(): void
     {

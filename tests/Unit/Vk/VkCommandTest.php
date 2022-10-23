@@ -51,13 +51,15 @@ class VkCommandTest extends Unit
     }
 
     /**
+     * @param int  $peer_id
+     * @param bool $expected
+     *
      * @return void
      *
      * @throws Exception
-     *
      * @dataProvider peerIdProvider
      */
-    public function testIsFromChat(int $peer_id, bool $expected)
+    public function testIsFromChat(int $peer_id, bool $expected): void
     {
         $this->tester->sendVkMessage('test');
         $data = $this->tester->getVkMessageData();

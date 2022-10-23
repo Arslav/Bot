@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\Cli;
 
 use Arslav\Bot\Cli\Command;

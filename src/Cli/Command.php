@@ -3,10 +3,22 @@
 namespace Arslav\Bot\Cli;
 
 use Arslav\Bot\BaseCommand;
-use ReflectionClass;
+use JetBrains\PhpStorm\Pure;
+use Arslav\Bot\Helpers\AnnotationReader;
 
 abstract class Command extends BaseCommand
 {
+    protected AnnotationReader $annotationReader;
+
+    /**
+     * @param array $aliases
+     */
+    #[Pure] public function __construct(array $aliases)
+    {
+        $this->annotationReader = (new AnnotationReader(static::class));
+        parent::__construct($aliases);
+    }
+
     /**
      * @return void
      */
@@ -17,11 +29,6 @@ abstract class Command extends BaseCommand
      */
     public function getDescription(): ?string
     {
-        $reflectionClass = new ReflectionClass(static::class);
-        $comment = $reflectionClass->getDocComment();
-
-        preg_match('/^\s*\*\s([\w\s]*)$/mu', $comment, $matches);
-
-        return $matches[1] ?? null;
+        return $this->annotationReader->getValue();
     }
 }

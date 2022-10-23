@@ -28,7 +28,8 @@
         "symfony/orm-pack": "^2.2",
         "psr/container": "^1.0",
         "psr/log": "^2.0.0",
-        "symfony/console": "^5"
+        "symfony/console": "^5",
+        "telegram-bot/api": "^2.3"
     },
     "require-dev": {
         "php-di/php-di": "^6.3",

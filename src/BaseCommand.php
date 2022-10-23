@@ -3,6 +3,8 @@
 namespace Arslav\Bot;
 
 
+use InvalidArgumentException;
+
 abstract class BaseCommand
 {
     public array $aliases = [];
@@ -19,11 +21,15 @@ abstract class BaseCommand
     /**
      * AbstractBaseCommand constructor.
      *
-     * @param array $aliases
+     * @param string|array $aliases
      */
-    public function __construct(array $aliases)
+    public function __construct(string|array $aliases)
     {
-        $this->aliases = $aliases;
+        switch (true) {
+            case is_array($aliases): $this->aliases = $aliases; break;
+            case is_string($aliases): $this->aliases[] = $aliases; break;
+            default: throw new InvalidArgumentException('Command aliases must be string or array of string');
+        }
     }
 
     /**
@@ -31,9 +37,19 @@ abstract class BaseCommand
      *
      * @return void
      */
-    public function setArgs(array $args)
+    public function setArgs(array $args): void
     {
         $this->args = $args;
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return void
+     */
+    public function init(mixed $data): void
+    {
+        //Stub
     }
 
     /**

@@ -2,9 +2,10 @@
 
 namespace Tests\Unit;
 
-use Arslav\Bot\BaseCommand;
-use Codeception\Test\Unit;
 use Exception;
+use Codeception\Test\Unit;
+use Arslav\Bot\BaseCommand;
+use InvalidArgumentException;
 
 class BaseCommandTest extends Unit
 {
@@ -39,5 +40,18 @@ class BaseCommandTest extends Unit
         $value = ['test1', 'test2'];
         $this->command->setArgs($value);
         $this->assertSame($value, $this->command->args);
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testConstructSingleAlias(): void
+    {
+        $this->command = $this->construct(
+            BaseCommand::class, ['test'],
+            ['run' => true],
+        );
+        $this->assertSame(['test'], $this->command->aliases);
     }
 }

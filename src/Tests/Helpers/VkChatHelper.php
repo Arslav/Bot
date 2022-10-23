@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arslav\Bot\Tests\Helpers;
 
+use Throwable;
 use Arslav\Bot\BaseApp;
 use Arslav\Bot\Vk\App;
 use Codeception\Module;
@@ -35,6 +36,7 @@ class VkChatHelper extends Module
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws Throwable
      */
     public function waitVkResponse(): void
     {

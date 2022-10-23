@@ -2,6 +2,7 @@
 
 namespace Arslav\Bot\Cli;
 
+use ReflectionException;
 use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -9,8 +10,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class HelpCommand extends Command
 {
 
-    #[Pure]
-    public function __construct()
+    #[Pure] public function __construct()
     {
         parent::__construct(['help', '-h', '--help']);
     }
@@ -20,6 +20,7 @@ class HelpCommand extends Command
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
      */
     public function run(): void
     {

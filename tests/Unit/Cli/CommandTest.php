@@ -27,7 +27,7 @@ class CommandTest extends Unit
     /**
      * @return void
      */
-    public function testGetDescription()
+    public function testGetDescription(): void
     {
         /**
          * Test
@@ -45,7 +45,7 @@ class CommandTest extends Unit
     /**
      * @return void
      */
-    public function testGetNullDescription()
+    public function testGetNullDescription(): void
     {
         $command = new class(['test']) extends Command {
             function run(): void

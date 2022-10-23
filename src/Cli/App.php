@@ -2,7 +2,7 @@
 
 namespace Arslav\Bot\Cli;
 
-use Arslav\Bot\Vk\App as BaseApp;
+use Arslav\Bot\BaseApp;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -15,7 +15,7 @@ class App extends BaseApp
 
     /**
      * @param ContainerInterface $container
-     * @param array $args
+     * @param array              $args
      */
     public function __construct(ContainerInterface $container, array $args)
     {
@@ -27,45 +27,33 @@ class App extends BaseApp
     }
 
     /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'CLI';
+    }
+
+    /**
      * @return void
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function run(): void
+    public function onStart(): void
     {
-        self::getLogger()->info('App started');
-        self::getLogger()->info('Launched from CLI');
-        self::getLogger()->debug('Args: ' . print_r($this->args, true));
+        /** @var Command $command */
+        $commands = self::getContainer()->get('cli-commands');
+        $helpCommand = new HelpCommand();
+        $commands[] = $helpCommand;
 
-        try {
-            /** @var Command $command */
-            $commands = self::getContainer()->get('cli-commands');
-            $helpCommand = new HelpCommand();
-            $commands[] = $helpCommand;
-
-            foreach ($commands as $command) {
-                if (in_array($this->commandAlias, $command->aliases)) {
-                    self::getLogger()->info('Command detected: ' . get_class($command));
-                    if ($command->beforeAction()) {
-                        if ($this->args) {
-                            $command->setArgs($this->args);
-                        }
-
-                        $command->run();
-                        return;
-                    }
-                }
+        foreach ($commands as $command) {
+            if (in_array($this->commandAlias, $command->aliases)) {
+                $this->runCommand($command, null, $this->args ?? []);
             }
-            echo "Ошибка! Команда $this->commandAlias не распознана!" . PHP_EOL . PHP_EOL;
-
-            $helpCommand->run();
-        } catch (Exception $e) {
-            App::getLogger()->error($e->getMessage(), $e->getTrace());
-            throw $e;
-        } finally {
-            App::getLogger()->info('App end');
         }
+        echo "Ошибка! Команда $this->commandAlias не распознана!" . PHP_EOL . PHP_EOL;
+        $helpCommand->run();
     }
 }

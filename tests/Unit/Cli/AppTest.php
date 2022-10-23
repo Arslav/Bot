@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Cli;
 
+use Throwable;
 use Arslav\Bot\BaseApp;
 use Arslav\Bot\Cli\App;
 use Arslav\Bot\Cli\Command;
@@ -17,6 +18,9 @@ class AppTest extends Unit
 {
     private ?Container $container;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->container = BaseApp::getContainer();
@@ -32,7 +36,7 @@ class AppTest extends Unit
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws Exception
+     * @throws Throwable
      *
      * @dataProvider commandProvider
      */

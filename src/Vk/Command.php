@@ -40,7 +40,7 @@ abstract class Command extends BaseCommand
     }
 
     /**
-     * @return void
+     * @return mixed
      */
     abstract public function run(): void;
 }
