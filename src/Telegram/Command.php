@@ -3,11 +3,11 @@
 namespace Arslav\Bot\Telegram;
 
 use Arslav\Bot\BaseCommand;
-use TelegramBot\Api\Types\Message;
+use TelegramBot\Api\Types\Update;
 
 abstract class Command extends BaseCommand
 {
-    public Message $data;
+    public Update $data;
     public string $message;
     public int $chatId;
 
@@ -23,8 +23,9 @@ abstract class Command extends BaseCommand
      */
     public function init(mixed $data): void
     {
+        /** @var Update $data */
         $this->data = $data;
-        $this->message = $data->getText();
-        $this->chatId = (int) $data->getChat()->getId();
+        $this->message = $data->getMessage()->getText();
+        $this->chatId = (int) $data->getMessage()->getChat()->getId();
     }
 }

@@ -12,7 +12,7 @@ use Arslav\Bot\Tests\Helpers\TelegramBotHelper;
 
 class TelegramApiMockFactory
 {
-    public static array $commands;
+    public static $closure;
 
     /**
      * @return MockObject|Client
@@ -29,21 +29,18 @@ class TelegramApiMockFactory
      */
     public static function createClient(): MockObject|Client
     {
-        self::$commands = [];
+        self::$closure = null;
         TelegramBotHelper::clearTelegramData();
         return Stub::constructEmpty(Client::class, [null], [
-            'command' => function (string $command, Closure $closure) {
-                self::$commands[$command] = $closure;
+            'on' => function ($closure) {
+                self::$closure = $closure;
             },
             'run' => function () {
-                if (!TelegramBotHelper::$message) {
-                    return;
-                }
-                $command = explode(' ', TelegramBotHelper::$message)[0];
-                if (!in_array($command, array_keys(self::$commands))) {
-                    return;
-                }
-                self::$commands[$command](TelegramBotHelper::getTelegramMessageData());
+               $closure = self::$closure;
+               $data = TelegramBotHelper::getTelegramMessageData();
+               if ($data) {
+                   $closure($data);
+               }
             }
         ]);
     }

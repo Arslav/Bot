@@ -7,7 +7,7 @@ use DI\NotFoundException;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Client;
 use DI\DependencyException;
-use TelegramBot\Api\Types\Message;
+use TelegramBot\Api\Types\Update;
 use TelegramBot\Api\InvalidJsonException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -56,27 +56,20 @@ class App extends BaseApp
     {
         $telegramClient = self::getTelegramClient();
         $commands = self::getContainer()->get('telegram-commands');
-        /** @var Command $command */
-        foreach ($commands as $command) {
-            foreach ($command->aliases as $alias) {
-                $commandText = $this->getCommandName($alias);
-                $telegramClient->command($commandText, function (Message $message) use ($alias, $command) {
-                    $args = [];
-                    $this->checkAlias($alias, $message->getText(), $args);
-                    $this->runCommand($command, $message, $args);
-                });
-            }
-        }
-        $telegramClient->run();
-    }
 
-    /**
-     * @param string $alias
-     *
-     * @return string
-     */
-    protected function getCommandName(string $alias): string
-    {
-        return explode(' ', $alias)[0];
+        $telegramClient->on(function (Update $update) use ($commands) {
+            /** @var Command $command */
+            foreach ($commands as $command) {
+                foreach ($command->aliases as $alias) {
+                    $args = [];
+                    if ($this->checkAlias($alias, $update->getMessage()->getText(), $args)) {
+                        $this->runCommand($command, $update, $args);
+                        return;
+                    }
+                }
+            }
+        }, fn () => true);
+
+        $telegramClient->run();
     }
 }

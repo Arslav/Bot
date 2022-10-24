@@ -7,6 +7,7 @@ use Arslav\Bot\BaseApp;
 use Codeception\Module;
 use Arslav\Bot\Telegram\App;
 use TelegramBot\Api\Types\Chat;
+use TelegramBot\Api\Types\Update;
 use TelegramBot\Api\Types\Message;
 use Psr\Container\NotFoundExceptionInterface;
 use TelegramBot\Api\InvalidArgumentException;
@@ -34,21 +35,24 @@ class TelegramBotHelper extends Module
     }
 
     /**
-     * @return ?Message
+     * @return ?Update
      * @throws InvalidArgumentException
      */
-    public static function getTelegramMessageData(): ?Message
+    public static function getTelegramMessageData(): ?Update
     {
         if (!self::$message) {
             return null;
         }
         $message = new Message();
         $message->setText(self::$message);
+
         $chat = new Chat();
         $chat->setId(1);
         $message->setChat($chat);
 
-        return $message;
+        $update = new Update();
+        $update->setMessage($message);
+        return $update;
     }
 
     /**
