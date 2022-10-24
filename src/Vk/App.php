@@ -37,7 +37,7 @@ class App extends BaseApp
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function onStart() : void
+    protected function onStart() : void
     {
         $data = $this->init();
         if ($data == null) {

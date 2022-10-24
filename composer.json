@@ -2,6 +2,9 @@
     "name": "arslav/bot",
     "description": "New version vk bot framework",
     "type": "library",
+    "scripts": {
+        "test": "vendor/bin/codecept run"
+    },
     "autoload": {
         "psr-4": {
             "Arslav\\Bot\\": "src/"

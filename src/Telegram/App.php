@@ -52,7 +52,7 @@ class App extends BaseApp
      * @throws NotFoundException
      * @throws InvalidJsonException
      */
-    public function onStart(): void
+    protected function onStart(): void
     {
         $telegramClient = self::getTelegramClient();
         $commands = self::getContainer()->get('telegram-commands');

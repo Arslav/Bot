@@ -41,7 +41,7 @@ class App extends BaseApp
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function onStart(): void
+    protected function onStart(): void
     {
         /** @var Command $command */
         $commands = self::getContainer()->get('cli-commands');
@@ -51,6 +51,7 @@ class App extends BaseApp
         foreach ($commands as $command) {
             if (in_array($this->commandAlias, $command->aliases)) {
                 $this->runCommand($command, null, $this->args ?? []);
+                return;
             }
         }
         echo "Ошибка! Команда $this->commandAlias не распознана!" . PHP_EOL . PHP_EOL;

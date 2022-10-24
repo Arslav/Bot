@@ -11,9 +11,9 @@ abstract class Command extends BaseCommand
     protected AnnotationReader $annotationReader;
 
     /**
-     * @param array $aliases
+     * @param array|string $aliases
      */
-    #[Pure] public function __construct(array $aliases)
+    #[Pure] public function __construct(string|array $aliases)
     {
         $this->annotationReader = (new AnnotationReader(static::class));
         parent::__construct($aliases);

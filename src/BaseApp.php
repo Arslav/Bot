@@ -89,7 +89,7 @@ abstract class BaseApp
     /**
      * @return void
      */
-    abstract public function onStart(): void;
+    abstract protected function onStart(): void;
 
     /**
      * @return string

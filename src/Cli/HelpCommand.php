@@ -7,9 +7,13 @@ use JetBrains\PhpStorm\Pure;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * Вывод справки
+ *
+ * @package Arslav\Bot\Cli
+ */
 class HelpCommand extends Command
 {
-
     #[Pure] public function __construct()
     {
         parent::__construct(['help', '-h', '--help']);
@@ -20,12 +24,12 @@ class HelpCommand extends Command
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws ReflectionException
      */
     public function run(): void
     {
         echo 'Доступные команды: ' . PHP_EOL;
         $commands = App::getContainer()->get('cli-commands');
+        $commands[] = $this;
         /** @var Command $command */
         foreach ($commands as $command) {
             echo ' - ' . $command->aliases[0];
