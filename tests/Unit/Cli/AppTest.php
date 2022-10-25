@@ -45,13 +45,13 @@ class AppTest extends Unit
         $command = $this->construct(
             Command::class,
             [$aliases],
-            ['run' => Expected::exactly((int) $expectRun)]
+            ['execute' => Expected::exactly((int) $expectRun)]
         );
         $this->container->set('cli-commands', [$command]);
         $app = new App($this->container, array_merge(['./bin/console', 'test'], $args));
         $app->run();
         if ($expectRun) {
-            $this->assertSame($args, $command->args);
+            $this->assertSame($args, $command->getArgs());
         }
     }
 
@@ -71,14 +71,14 @@ class AppTest extends Unit
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws Exception
+     * @throws Throwable
      */
     public function testRunWithError(): void
     {
         $app = new App($this->container, array_merge(['./bin/console', 'test']));
         App::getContainer()->set('cli-commands', [
             $this->construct(Command::class, [['test']], [
-                'run' => function() {
+                'execute' => function() {
                     throw new Exception('test exception');
                 }
             ]),

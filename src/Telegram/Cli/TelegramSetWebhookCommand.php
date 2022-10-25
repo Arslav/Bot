@@ -23,7 +23,7 @@ class TelegramSetWebhookCommand extends Command
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    public function run(): void
+    protected function execute(): void
     {
         $url = $this->args[0];
         $cert = $this->args[1] ?? null;

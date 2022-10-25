@@ -3,17 +3,17 @@
 namespace Arslav\Bot\Cli;
 
 use Arslav\Bot\BaseCommand;
-use JetBrains\PhpStorm\Pure;
 use Arslav\Bot\Helpers\AnnotationReader;
+use Arslav\Bot\Command\DescriptionInterface;
 
-abstract class Command extends BaseCommand
+abstract class Command extends BaseCommand implements DescriptionInterface
 {
     protected AnnotationReader $annotationReader;
 
     /**
      * @param array|string $aliases
      */
-    #[Pure] public function __construct(string|array $aliases)
+    public function __construct(string|array $aliases)
     {
         $this->annotationReader = (new AnnotationReader(static::class));
         parent::__construct($aliases);
@@ -22,7 +22,7 @@ abstract class Command extends BaseCommand
     /**
      * @return void
      */
-    abstract public function run(): void;
+    abstract protected function execute(): void;
 
     /**
      * @return string|null

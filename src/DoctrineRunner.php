@@ -87,6 +87,9 @@ class DoctrineRunner
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @psalm-suppress InternalMethod
+     * @psalm-suppress InternalClass
      */
     protected function getDependencyFactory(): DependencyFactory
     {

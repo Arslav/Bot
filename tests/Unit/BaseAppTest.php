@@ -61,7 +61,7 @@ class BaseAppTest extends Unit
     public function testRun(): void
     {
         $app = $this->construct(BaseApp::class, [BaseApp::getContainer()], [
-            'onStart' => Expected::once(),
+            'execute' => Expected::once(),
             'getName' => 'Stub',
         ]);
         $app->run();
@@ -76,7 +76,7 @@ class BaseAppTest extends Unit
     public function testRunException(): void
     {
         $app = $this->construct(BaseApp::class, [BaseApp::getContainer()], [
-            'onStart' => Expected::once(function () {
+            'execute' => Expected::once(function () {
                 throw new Exception();
             }),
             'getName' => 'Stub',

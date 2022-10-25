@@ -12,10 +12,10 @@ use Arslav\Bot\Tests\Helpers\TelegramBotHelper;
 
 class TelegramApiMockFactory
 {
-    public static $closure;
+    public static Closure $closure;
 
     /**
-     * @return MockObject|Client
+     * @return MockObject|BotApi
      * @throws ReflectionException
      */
     public static function createApi(): MockObject|BotApi
@@ -29,7 +29,6 @@ class TelegramApiMockFactory
      */
     public static function createClient(): MockObject|Client
     {
-        self::$closure = null;
         TelegramBotHelper::clearTelegramData();
         return Stub::constructEmpty(Client::class, [null], [
             'on' => function ($closure) {

@@ -34,12 +34,12 @@ class AppTest extends Unit
         $command = $this->construct(
             Command::class,
             [$commandAliases],
-            ['run' => null]
+            ['execute' => null]
         );
         App::getContainer()->set('vk-commands', [$command]);
         $this->tester->sendVkMessage($message);
         $this->tester->waitVkResponse();
-        $this->assertSame($args, $command->args);
+        $this->assertSame($args, $command->getArgs());
     }
 
     /**
@@ -100,9 +100,9 @@ class AppTest extends Unit
     public function testRunWithCommand(): void
     {
         App::getContainer()->set('vk-commands', [
-            $this->construct(Command::class, [['test']], ['run' => Expected::once()]),
-            $this->construct(Command::class, [['test2']], ['run' => Expected::never()]),
-            $this->construct(Command::class, [['test3']], ['run' => Expected::never()]),
+            $this->construct(Command::class, [['test']], ['execute' => Expected::once()]),
+            $this->construct(Command::class, [['test2']], ['execute' => Expected::never()]),
+            $this->construct(Command::class, [['test3']], ['execute' => Expected::never()]),
         ]);
         $this->tester->sendVkMessage('test');
         $this->tester->waitVkResponse();
@@ -137,7 +137,7 @@ class AppTest extends Unit
         ]);
         App::getContainer()->set('vk-commands', [
             $this->construct(Command::class, [['test']], [
-                'run' => function() {
+                'execute' => function() {
                     throw new Exception('test exception');
                 }
             ]),

@@ -52,7 +52,7 @@ class App extends BaseApp
      * @throws NotFoundException
      * @throws InvalidJsonException
      */
-    protected function onStart(): void
+    protected function execute(): void
     {
         $telegramClient = self::getTelegramClient();
         $commands = self::getContainer()->get('telegram-commands');
@@ -60,10 +60,10 @@ class App extends BaseApp
         $telegramClient->on(function (Update $update) use ($commands) {
             /** @var Command $command */
             foreach ($commands as $command) {
-                foreach ($command->aliases as $alias) {
+                foreach ($command->getAliases() as $alias) {
                     $args = [];
                     if ($this->checkAlias($alias, $update->getMessage()->getText(), $args)) {
-                        $this->runCommand($command, $update, $args);
+                        $command->run($update, $args);
                         return;
                     }
                 }

@@ -77,7 +77,7 @@ abstract class BaseApp
         self::getLogger()->info('App started');
         self::getLogger()->info('Launched: ' . $this->getName());
         try {
-            $this->onStart();
+            $this->execute();
         } catch (Throwable $e) {
             self::getLogger()->error($e->getMessage(), $e->getTrace());
             throw $e;
@@ -89,31 +89,12 @@ abstract class BaseApp
     /**
      * @return void
      */
-    abstract protected function onStart(): void;
+    abstract protected function execute(): void;
 
     /**
      * @return string
      */
     abstract public function getName(): string;
-
-    /**
-     * @param BaseCommand $command
-     * @param mixed       $data
-     * @param array       $args
-     *
-     * @return void
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    protected function runCommand(BaseCommand $command, mixed $data = null, array $args = []): void
-    {
-        self::getLogger()->info('Command detected: ' . get_class($command));
-        $command->setArgs($args);
-        $command->init($data);
-        if ($command->beforeAction()) {
-            $command->run();
-        }
-    }
 
     /**
      * @param string $alias
@@ -139,6 +120,6 @@ abstract class BaseApp
         }
         self::getLogger()->debug('Parsed Args: ' . print_r($result, true));
 
-        return $result;
+        return (bool) $result;
     }
 }

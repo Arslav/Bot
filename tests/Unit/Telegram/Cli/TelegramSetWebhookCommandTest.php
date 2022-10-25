@@ -16,20 +16,16 @@ class TelegramSetWebhookCommandTest extends Unit
 {
     /**
      * @return void
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws TelegramBotException
      * @throws Exception
      */
-    public function testRun()
+    public function testRun(): void
     {
         $mock = $this->make(BotApi::class, [
             'setWebhook' => Expected::once(),
         ]);
         BaseApp::getContainer()->set(BotApi::class, $mock);
         $command = new TelegramSetWebhookCommand(['test']);
-        $command->setArgs(['test']);
-        $command->run();
+        $command->run(null, ['test']);
     }
 }
 

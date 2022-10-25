@@ -41,7 +41,7 @@ class App extends BaseApp
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    protected function onStart(): void
+    protected function execute(): void
     {
         /** @var Command $command */
         $commands = self::getContainer()->get('cli-commands');
@@ -49,8 +49,8 @@ class App extends BaseApp
         $commands[] = $helpCommand;
 
         foreach ($commands as $command) {
-            if (in_array($this->commandAlias, $command->aliases)) {
-                $this->runCommand($command, null, $this->args ?? []);
+            if (in_array($this->commandAlias, $command->getAliases())) {
+                $command->run(null, $this->args ?? []);
                 return;
             }
         }

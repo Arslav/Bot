@@ -15,20 +15,17 @@ class HelpCommandTest extends Unit
     /**
      * @return void
      *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      * @throws Exception
      */
     public function testRun(): void
     {
         $container = App::getContainer();
         $container->set('cli-commands', [
-            $this->constructEmpty(Command::class, [['test']], ['run' => true]),
             /**
              * Test
              */
             new class(['command']) extends Command {
-                function run(): void
+                protected function execute(): void
                 {
                     //Stub
                 }

@@ -19,7 +19,7 @@ class CommandTest extends Unit
         $command = $this->construct(
             Command::class,
             [['test']],
-            ['run' => Expected::once()]
+            ['execute' => Expected::once()]
         );
         $command->run();
     }
@@ -33,7 +33,7 @@ class CommandTest extends Unit
          * Test
          */
         $command = new class(['test']) extends Command {
-            function run(): void
+            protected function execute(): void
             {
                 //Stub
             }
@@ -48,7 +48,7 @@ class CommandTest extends Unit
     public function testGetNullDescription(): void
     {
         $command = new class(['test']) extends Command {
-            function run(): void
+            protected function execute(): void
             {
                 //Stub
             }

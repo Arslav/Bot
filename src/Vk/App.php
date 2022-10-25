@@ -37,7 +37,7 @@ class App extends BaseApp
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
-    protected function onStart() : void
+    protected function execute(): void
     {
         $data = $this->init();
         if ($data == null) {
@@ -55,10 +55,10 @@ class App extends BaseApp
         /** @var Command $command */
         $commands = self::getContainer()->get('vk-commands');
         foreach ($commands as $command) {
-            foreach ($command->aliases as $alias) {
+            foreach ($command->getAliases() as $alias) {
                 $args = [];
                 if ($this->checkAlias($alias, $data->object->text, $args)) {
-                    $this->runCommand($command, $data, $args);
+                    $command->run($data, $args);
                     return;
                 }
             }
@@ -76,6 +76,10 @@ class App extends BaseApp
         $data = self::getVk()->initVars();
         self::getLogger()->debug('Received data: ' . print_r($data, true));
 
-        return $data ?? null;
+        if (!$data) {
+            return null;
+        }
+        
+        return (object) $data;
     }
 }

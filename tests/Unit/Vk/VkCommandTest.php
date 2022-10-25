@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Vk;
 
+use stdClass;
 use Arslav\Bot\Vk\Command;
 use Codeception\Stub\Expected;
 use Codeception\Test\Unit;
@@ -23,31 +24,9 @@ class VkCommandTest extends Unit
         $command = $this->construct(
             Command::class,
             [['test']],
-            ['run' => Expected::once()]
+            ['execute' => Expected::once()]
         );
-        $command->init($this->tester->getVkMessageData());
-        $command->run();
-    }
-
-    /**
-     * @return void
-     *
-     * @throws Exception
-     */
-    public function testInit(): void
-    {
-        $this->tester->sendVkMessage('test');
-        $command = $this->construct(
-            Command::class,
-            [['test']],
-            ['run' => Expected::never()]
-        );
-        $command->init($this->tester->getVkMessageData());
-        $this->assertIsObject($command->data);
-        $this->assertIsString($command->message);
-        $this->assertIsInt($command->peerId);
-        $this->assertIsInt($command->fromId);
-        $this->assertNull($command->chatId);
+        $command->run($this->tester->getVkMessageData());
     }
 
     /**
@@ -62,14 +41,15 @@ class VkCommandTest extends Unit
     public function testIsFromChat(int $peer_id, bool $expected): void
     {
         $this->tester->sendVkMessage('test');
+        /** @var stdClass $data */
         $data = $this->tester->getVkMessageData();
         $data->object->peer_id = $peer_id;
         $command = $this->construct(
             Command::class,
             [['test']],
-            ['run' => Expected::never()]
+            ['execute' => Expected::once()]
         );
-        $command->init($data);
+        $command->run($data);
         $this->assertSame($expected, $command->isFromChat());
     }
 

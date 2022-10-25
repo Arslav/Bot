@@ -27,7 +27,7 @@ class AppTest extends Unit
         $container = BaseApp::getContainer();
         $container->set('telegram-commands', [
             $this->construct(Command::class, [['test']], [
-                'run' => Expected::once()
+                'execute' => Expected::once()
             ])
         ]);
         $this->tester->sendTelegramMessage('test');

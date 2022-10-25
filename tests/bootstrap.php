@@ -7,7 +7,7 @@ use DI\Container;
 $container = new Container();
 
 Stub::construct(BaseApp::class, [$container], [
-    'onStart' => function () {},
+    'execute' => function () {},
     'getName' => 'Stub',
 ]);
 

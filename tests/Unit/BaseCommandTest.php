@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use Exception;
 use Codeception\Test\Unit;
 use Arslav\Bot\BaseCommand;
-use InvalidArgumentException;
+use Codeception\Stub\Expected;
 
 class BaseCommandTest extends Unit
 {
@@ -19,17 +19,9 @@ class BaseCommandTest extends Unit
     {
         $this->command = $this->construct(
             BaseCommand::class, [['test']],
-            ['run' => true],
+            ['execute' => true],
         );
         parent::setUp();
-    }
-
-    /**
-     * @return void
-     */
-    public function testBeforeAction(): void
-    {
-        $this->assertSame(true, $this->command->beforeAction());
     }
 
     /**
@@ -39,7 +31,7 @@ class BaseCommandTest extends Unit
     {
         $value = ['test1', 'test2'];
         $this->command->setArgs($value);
-        $this->assertSame($value, $this->command->args);
+        $this->assertSame($value, $this->command->getArgs());
     }
 
     /**
@@ -50,8 +42,37 @@ class BaseCommandTest extends Unit
     {
         $this->command = $this->construct(
             BaseCommand::class, ['test'],
-            ['run' => true],
+            ['execute' => true],
         );
-        $this->assertSame(['test'], $this->command->aliases);
+        $this->assertSame(['test'], $this->command->getAliases());
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testRun(): void
+    {
+        $this->command = $this->construct(
+            BaseCommand::class, ['test'],
+            ['execute' => Expected::once()],
+        );
+        $this->command->run();
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testBeforeAction(): void
+    {
+        $this->command = $this->construct(
+            BaseCommand::class, ['test'],
+            [
+                'beforeAction' => false,
+                'execute' => Expected::never()
+            ],
+        );
+        $this->command->run();
     }
 }

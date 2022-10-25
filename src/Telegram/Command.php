@@ -14,14 +14,14 @@ abstract class Command extends BaseCommand
     /**
      * @return void
      */
-    abstract public function run(): void;
+    abstract protected function execute(): void;
 
     /**
      * @param mixed $data
      *
      * @return void
      */
-    public function init(mixed $data): void
+    protected function init(mixed $data = null): void
     {
         /** @var Update $data */
         $this->data = $data;

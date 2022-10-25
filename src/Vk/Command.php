@@ -15,9 +15,9 @@ abstract class Command extends BaseCommand
     //TODO: Параметр для отключения ^ $
 
     /**
-     * @param mixed $data
+     * @param mixed|null $data
      */
-    public function init(mixed $data) : void
+    protected function init(mixed $data = null) : void
     {
         $this->data = $data;
         $this->message = $data->object->text;
@@ -40,7 +40,7 @@ abstract class Command extends BaseCommand
     }
 
     /**
-     * @return mixed
+     * @return void
      */
-    abstract public function run(): void;
+    abstract protected function execute(): void;
 }
