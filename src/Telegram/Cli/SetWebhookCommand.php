@@ -13,7 +13,7 @@ use Psr\Container\ContainerExceptionInterface;
  *
  * @package Arslav\Bot\Telegram\Cli
  */
-class TelegramSetWebhookCommand extends Command
+class SetWebhookCommand extends Command
 {
 
     /**

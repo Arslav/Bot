@@ -10,7 +10,7 @@ use Codeception\Stub\Expected;
 use TelegramBot\Api\Exception as TelegramBotException;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
-use Arslav\Bot\Telegram\Cli\TelegramSetWebhookCommand;
+use Arslav\Bot\Telegram\Cli\SetWebhookCommand;
 
 class TelegramSetWebhookCommandTest extends Unit
 {
@@ -24,7 +24,7 @@ class TelegramSetWebhookCommandTest extends Unit
             'setWebhook' => Expected::once(),
         ]);
         BaseApp::getContainer()->set(BotApi::class, $mock);
-        $command = new TelegramSetWebhookCommand(['test']);
+        $command = new SetWebhookCommand(['test']);
         $command->run(null, ['test']);
     }
 }

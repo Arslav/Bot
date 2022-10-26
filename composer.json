@@ -33,7 +33,8 @@
         "psr/container": "^1.0",
         "psr/log": "^2.0.0",
         "symfony/console": "^5",
-        "telegram-bot/api": "^2.3"
+        "telegram-bot/api": "^2.3",
+        "team-reflex/discord-php": "^7.3.1"
     },
     "require-dev": {
         "php-di/php-di": "^6.3",
