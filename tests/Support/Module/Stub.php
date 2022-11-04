@@ -2,6 +2,7 @@
 
 namespace Tests\Support\Module;
 
+use Discord\Discord;
 use Arslav\Bot\BaseApp;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Client;
@@ -12,6 +13,7 @@ use Codeception\TestInterface;
 use DigitalStar\vk_api\vk_api;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
+use Arslav\Bot\Tests\Factories\DiscordApiMockFactory;
 use Arslav\Bot\Tests\Factories\TelegramApiMockFactory;
 
 class Stub extends Module
@@ -30,6 +32,7 @@ class Stub extends Module
         $container->set(vk_api::class, VkApiMockFactory::create());
         $container->set(BotApi::class, TelegramApiMockFactory::createApi());
         $container->set(Client::class, TelegramApiMockFactory::createClient());
+        $container->set(Discord::class, DiscordApiMockFactory::createDiscord());
 
         parent::_before($test);
     }

@@ -28,13 +28,17 @@ class App extends BaseApp
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function getDiscord(): Discord
+    public static function getDiscord(): Discord
     {
         return self::getContainer()->get(Discord::class);
     }
 
     /**
-     * @inheritDoc
+     * @return void
+     * @throws ContainerExceptionInterface
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws NotFoundExceptionInterface
      */
     protected function execute(): void
     {
@@ -44,9 +48,13 @@ class App extends BaseApp
 
         $discord->on(Event::READY, function (Discord $discord) use ($commands) {
             $discord->on(Event::MESSAGE_CREATE, function (Message $message, Discord $discord) use ($commands) {
+
+                // @codeCoverageIgnoreStart
                 if ($message->author->bot) {
                     return;
                 }
+                // @codeCoverageIgnoreEnd
+
                 foreach ($commands as $command) {
                     foreach ($command->getAliases() as $alias) {
                         $args = [];

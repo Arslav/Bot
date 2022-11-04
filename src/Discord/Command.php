@@ -6,6 +6,11 @@ use Discord\Discord;
 use Arslav\Bot\BaseCommand;
 use Discord\Parts\Channel\Message;
 
+/**
+ * Class Command
+ *
+ * @package Arslav\Bot\Discord
+ */
 abstract class Command extends BaseCommand
 {
     public Message $message;
@@ -18,8 +23,11 @@ abstract class Command extends BaseCommand
      */
     protected function init(mixed $data = null): void
     {
-        $this->message = $data['message'];
-        $this->discord = $data['discord'];
+        if ($data) {
+            $this->message = $data['message'];
+            $this->discord = $data['discord'];
+        }
+
         parent::init($data);
     }
 

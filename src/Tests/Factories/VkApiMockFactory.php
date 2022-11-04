@@ -8,6 +8,11 @@ use DigitalStar\vk_api\vk_api;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionException;
 
+/**
+ * Class VkApiMockFactory
+ *
+ * @package Arslav\Bot\Tests\Factories
+ */
 class VkApiMockFactory
 {
     /**

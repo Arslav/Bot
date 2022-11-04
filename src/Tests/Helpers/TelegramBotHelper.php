@@ -13,10 +13,20 @@ use Psr\Container\NotFoundExceptionInterface;
 use TelegramBot\Api\InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
 
+/**
+ * Class TelegramBotHelper
+ *
+ * @package Arslav\Bot\Tests\Helpers
+ */
 class TelegramBotHelper extends Module
 {
     public static ?string $message = null;
 
+    /**
+     * @param string $message
+     *
+     * @return void
+     */
     public static function sendTelegramMessage(string $message): void
     {
         self::$message = $message;
@@ -29,7 +39,7 @@ class TelegramBotHelper extends Module
      * @throws NotFoundExceptionInterface
      * @throws Throwable
      */
-    public function waitTelegramResponse(): void
+    public static function waitTelegramResponse(): void
     {
         (new App(BaseApp::getContainer()))->run();
     }

@@ -10,6 +10,11 @@ use TelegramBot\Api\Client;
 use PHPUnit\Framework\MockObject\MockObject;
 use Arslav\Bot\Tests\Helpers\TelegramBotHelper;
 
+/**
+ * Class TelegramApiMockFactory
+ *
+ * @package Arslav\Bot\Tests\Factories
+ */
 class TelegramApiMockFactory
 {
     public static Closure $closure;
