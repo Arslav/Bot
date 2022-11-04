@@ -28,8 +28,16 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * Class DoctrineRunner
+ *
+ * @package Arslav\Bot
+ */
 class DoctrineRunner
 {
+    protected const MIGRATION_PATH = 'src/Migration';
+    protected const MIGRATION_TABLE = 'doctrine_migration_versions';
+
     protected ContainerInterface $container;
     protected EntityManager $entityManager;
     protected Connection $connection;
@@ -76,7 +84,7 @@ class DoctrineRunner
     {
         $storageConfiguration = new TableMetadataStorageConfiguration();
         $storageConfiguration->setTableName(
-            $this->container->get('migration')['table_name'] ?? 'doctrine_migration_versions'
+            $this->container->get('migration')['table_name'] ?? self::MIGRATION_TABLE
         );
 
         return $storageConfiguration;
@@ -113,7 +121,7 @@ class DoctrineRunner
         $config = new Configuration();
         $config->addMigrationsDirectory(
             $this->container->get('migration')['namespace'],
-            $this->container->get('migration')['src'] ?? 'src/Migration',
+            $this->container->get('migration')['src'] ?? self::MIGRATION_PATH,
         );
         $config->setAllOrNothing(true);
         $config->setCheckDatabasePlatform(false);
