@@ -3,6 +3,8 @@
 namespace Arslav\Bot\Vk;
 
 use Arslav\Bot\BaseApp;
+use DI\NotFoundException;
+use DI\DependencyException;
 use DigitalStar\vk_api\vk_api;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -19,15 +21,15 @@ class App extends BaseApp
     }
 
     /**
-     * @return vk_api
-     *
+     * @return Bot
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws Exception
+     * @throws DependencyException
+     * @throws NotFoundException
      */
-    public static function getVk(): vk_api
+    public static function bot(): Bot
     {
-        return self::getContainer()->get(vk_api::class);
+        return self::getContainer()->get(Bot::class);
     }
 
     /**
@@ -39,47 +41,22 @@ class App extends BaseApp
      */
     protected function execute(): void
     {
-        $data = $this->init();
-        if ($data == null) {
+        $message = self::bot()->getMessage();
+        if ($message == null) {
             self::getLogger()->info('No data received');
             return;
         }
-        //TODO: Разделить команды по типу триггеров! message_new и т.д.!!!
-        if ($data->type != 'message_new') {
-            self::getLogger()->error('Unsupported type');
-            return;
-        }
-
-        self::getLogger()->info('New message: '. print_r($data->object->text, true));
 
         /** @var Command $command */
         $commands = self::getContainer()->get('vk-commands');
         foreach ($commands as $command) {
             foreach ($command->getAliases() as $alias) {
                 $args = [];
-                if ($this->checkAlias($alias, $data->object->text, $args)) {
-                    $command->run($data, $args);
+                if ($this->checkAlias($alias, $message->getContent(), $args)) {
+                    $command->run($message, $args);
                     return;
                 }
             }
         }
-    }
-
-    /**
-     * @return object|null
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    protected function init(): ?object
-    {
-        $data = self::getVk()->initVars();
-        self::getLogger()->debug('Received data: ' . print_r($data, true));
-
-        if (!$data) {
-            return null;
-        }
-        
-        return (object) $data;
     }
 }

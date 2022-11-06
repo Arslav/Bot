@@ -4,6 +4,7 @@ namespace Arslav\Bot;
 
 use Throwable;
 use DI\Container;
+use Arslav\Bot\Vk\Bot;
 use Arslav\Bot\Cli\App;
 use Doctrine\ORM\EntityManager;
 use Exception;
