@@ -56,4 +56,20 @@ class Message
     {
         return $this->content;
     }
+
+    /**
+     * @return int|null
+     */
+    public function getChatId(): ?int
+    {
+        return $this->chatId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
 }
