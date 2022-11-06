@@ -30,7 +30,7 @@ class Bot extends BaseBot
      */
     public function getMessage(): ?Message
     {
-        if (!self::$message) {
+        if (self::$message) {
             return self::$message;
         }
 
@@ -95,11 +95,10 @@ class Bot extends BaseBot
      */
     protected function getIds(mixed $data): array
     {
-        $userId = $data->object->peerId;
-        $chatId = null;
+        $userId = $data->object->peer_id;
+        $chatId = $data->object->peer_id;
 
-        if ($data->object->peerId - 2000000000 > 0) {
-            $chatId = $data->object->peer_id;
+        if ($userId - 2000000000 > 0) {
             $userId = $data->object->from_id;
         }
 
