@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use Throwable;
 use Exception;
-use Arslav\Bot\BaseApp;
+use Arslav\Bot\App;
 use Codeception\Test\Unit;
 use Codeception\Stub\Expected;
 use Doctrine\ORM\EntityManager;
@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
-class BaseAppTest extends Unit
+class AppTest extends Unit
 {
     /**
      * @throws ContainerExceptionInterface
@@ -21,8 +21,8 @@ class BaseAppTest extends Unit
      */
     public function testGetEntityManager()
     {
-        BaseApp::getContainer()->set(EntityManager::class, $this->makeEmpty(EntityManager::class));
-        $this->assertInstanceOf(EntityManager::class, BaseApp::getEntityManager());
+        App::getContainer()->set(EntityManager::class, $this->makeEmpty(EntityManager::class));
+        $this->assertInstanceOf(EntityManager::class, App::getEntityManager());
     }
 
     /**
@@ -33,7 +33,7 @@ class BaseAppTest extends Unit
      */
     public function testGetLogger(): void
     {
-        $this->assertInstanceOf(LoggerInterface::class, BaseApp::getLogger());
+        $this->assertInstanceOf(LoggerInterface::class, App::getLogger());
     }
 
     /**
@@ -41,7 +41,7 @@ class BaseAppTest extends Unit
      */
     public function testGetContainer(): void
     {
-        $this->assertInstanceOf(ContainerInterface::class, BaseApp::getContainer());
+        $this->assertInstanceOf(ContainerInterface::class, App::getContainer());
     }
 
     /**
@@ -49,7 +49,7 @@ class BaseAppTest extends Unit
      */
     public function testGetInstance(): void
     {
-        $this->assertInstanceOf(BaseApp::class, BaseApp::getInstance());
+        $this->assertInstanceOf(App::class, App::getInstance());
     }
 
     /**
@@ -60,7 +60,7 @@ class BaseAppTest extends Unit
      */
     public function testRun(): void
     {
-        $app = $this->construct(BaseApp::class, [BaseApp::getContainer()], [
+        $app = $this->construct(App::class, [App::getContainer()], [
             'execute' => Expected::once(),
             'getName' => 'Stub',
         ]);
@@ -75,7 +75,7 @@ class BaseAppTest extends Unit
      */
     public function testRunException(): void
     {
-        $app = $this->construct(BaseApp::class, [BaseApp::getContainer()], [
+        $app = $this->construct(App::class, [App::getContainer()], [
             'execute' => Expected::once(function () {
                 throw new Exception();
             }),

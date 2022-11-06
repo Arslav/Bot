@@ -3,15 +3,17 @@
 namespace Tests\Unit\Telegram\Cli;
 
 use Exception;
-use Arslav\Bot\BaseApp;
+use Arslav\Bot\App;
 use Codeception\Test\Unit;
-use TelegramBot\Api\BotApi;
+use Arslav\Bot\Telegram\Bot;
 use Codeception\Stub\Expected;
-use TelegramBot\Api\Exception as TelegramBotException;
-use Psr\Container\NotFoundExceptionInterface;
-use Psr\Container\ContainerExceptionInterface;
 use Arslav\Bot\Telegram\Cli\SetWebhookCommand;
 
+/**
+ * Class TelegramSetWebhookCommandTest
+ *
+ * @package Tests\Unit\Telegram\Cli
+ */
 class TelegramSetWebhookCommandTest extends Unit
 {
     /**
@@ -20,10 +22,10 @@ class TelegramSetWebhookCommandTest extends Unit
      */
     public function testRun(): void
     {
-        $mock = $this->make(BotApi::class, [
+        $mock = $this->make(Bot::class, [
             'setWebhook' => Expected::once(),
         ]);
-        BaseApp::getContainer()->set(BotApi::class, $mock);
+        App::getContainer()->set(Bot::class, $mock);
         $command = new SetWebhookCommand(['test']);
         $command->run(null, ['test']);
     }

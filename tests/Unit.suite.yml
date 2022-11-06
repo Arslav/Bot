@@ -6,9 +6,6 @@ actor: UnitTester
 modules:
     enabled:
         - Codeception\Module\Cli
-        - \Arslav\Bot\Tests\Helpers\VkChatHelper
-        - \Arslav\Bot\Tests\Helpers\TelegramBotHelper
-        - \Arslav\Bot\Tests\Helpers\DiscordBotHelper
         - Asserts
         - \Tests\Support\Module\Stub
 step_decorators: ~

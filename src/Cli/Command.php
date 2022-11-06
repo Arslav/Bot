@@ -2,10 +2,15 @@
 
 namespace Arslav\Bot\Cli;
 
-use Arslav\Bot\BaseCommand;
+use Arslav\Bot\Command as BaseCommand;
 use Arslav\Bot\Helpers\AnnotationReader;
 use Arslav\Bot\Command\DescriptionInterface;
 
+/**
+ * Class Command
+ *
+ * @package Arslav\Bot\Cli
+ */
 abstract class Command extends BaseCommand implements DescriptionInterface
 {
     protected AnnotationReader $annotationReader;

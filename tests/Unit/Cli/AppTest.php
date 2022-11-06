@@ -3,7 +3,6 @@
 namespace Tests\Unit\Cli;
 
 use Throwable;
-use Arslav\Bot\BaseApp;
 use Arslav\Bot\Cli\App;
 use Arslav\Bot\Cli\Command;
 use Codeception\Stub;
@@ -23,7 +22,7 @@ class AppTest extends Unit
      */
     protected function setUp(): void
     {
-        $this->container = BaseApp::getContainer();
+        $this->container = App::getContainer();
         parent::setUp();
     }
 
@@ -50,6 +49,7 @@ class AppTest extends Unit
         $this->container->set('cli-commands', [$command]);
         $app = new App($this->container, array_merge(['./bin/console', 'test'], $args));
         $app->run();
+
         if ($expectRun) {
             $this->assertSame($args, $command->getArgs());
         }

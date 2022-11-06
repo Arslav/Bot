@@ -4,8 +4,6 @@ namespace Arslav\Bot;
 
 use Throwable;
 use DI\Container;
-use Arslav\Bot\Vk\Bot;
-use Arslav\Bot\Cli\App;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -13,15 +11,20 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
-abstract class BaseApp
+/**
+ * Class App
+ *
+ * @package Arslav\Bot
+ */
+abstract class App
 {
     protected static ContainerInterface $container;
-    protected static BaseApp $instance;
+    protected static App $instance;
 
     /**
-     * @return BaseApp
+     * @return App
      */
-    public static function getInstance(): BaseApp
+    public static function getInstance(): App
     {
         return self::$instance;
     }
@@ -76,7 +79,7 @@ abstract class BaseApp
     public function run(): void
     {
         self::getLogger()->info('App started');
-        self::getLogger()->info('Launched: ' . $this->getName());
+        self::getLogger()->info('Launched: ' . static::class);
         try {
             $this->execute();
         } catch (Throwable $e) {
@@ -93,9 +96,9 @@ abstract class BaseApp
     abstract protected function execute(): void;
 
     /**
-     * @return string
+     * @return Bot
      */
-    abstract public function getName(): string;
+    abstract public static function bot(): Bot;
 
     /**
      * @param string $alias

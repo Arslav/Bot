@@ -4,12 +4,12 @@ namespace Tests\Unit;
 
 use Exception;
 use Codeception\Test\Unit;
-use Arslav\Bot\BaseCommand;
+use Arslav\Bot\Command;
 use Codeception\Stub\Expected;
 
-class BaseCommandTest extends Unit
+class CommandTest extends Unit
 {
-    private BaseCommand $command;
+    private Command $command;
 
     /**
      * @inheritDoc
@@ -18,20 +18,10 @@ class BaseCommandTest extends Unit
     protected function setUp(): void
     {
         $this->command = $this->construct(
-            BaseCommand::class, [['test']],
+            Command::class, [['test']],
             ['execute' => true],
         );
         parent::setUp();
-    }
-
-    /**
-     * @return void
-     */
-    public function testSetArgs(): void
-    {
-        $value = ['test1', 'test2'];
-        $this->command->setArgs($value);
-        $this->assertSame($value, $this->command->getArgs());
     }
 
     /**
@@ -41,7 +31,7 @@ class BaseCommandTest extends Unit
     public function testConstructSingleAlias(): void
     {
         $this->command = $this->construct(
-            BaseCommand::class, ['test'],
+            Command::class, ['test'],
             ['execute' => true],
         );
         $this->assertSame(['test'], $this->command->getAliases());
@@ -54,7 +44,7 @@ class BaseCommandTest extends Unit
     public function testRun(): void
     {
         $this->command = $this->construct(
-            BaseCommand::class, ['test'],
+            Command::class, ['test'],
             ['execute' => Expected::once()],
         );
         $this->command->run();
@@ -67,7 +57,7 @@ class BaseCommandTest extends Unit
     public function testBeforeAction(): void
     {
         $this->command = $this->construct(
-            BaseCommand::class, ['test'],
+            Command::class, ['test'],
             [
                 'beforeAction' => false,
                 'execute' => Expected::never()

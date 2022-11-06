@@ -3,24 +3,22 @@
 namespace Arslav\Bot\Discord;
 
 use Discord\Discord;
-use Arslav\Bot\BaseApp;
 use DI\NotFoundException;
 use DI\DependencyException;
+use Arslav\Bot\Command;
 use Discord\WebSockets\Event;
+use Arslav\Bot\App as BaseApp;
 use Discord\Parts\Channel\Message;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 
+/**
+ * Class App
+ *
+ * @package Arslav\Bot\Discord
+ */
 class App extends BaseApp
 {
-    /**
-     * @inheritDoc
-     */
-    public function getName(): string
-    {
-        return 'Discord';
-    }
-
     /**
      * @return Discord
      * @throws DependencyException
@@ -59,7 +57,8 @@ class App extends BaseApp
                     foreach ($command->getAliases() as $alias) {
                         $args = [];
                         if ($this->checkAlias($alias, $message->content, $args)) {
-                            $command->run(['message' => $message, 'discord' => $discord], $args);
+                            //TODO: Починить дискорд
+                            //$command->run(['message' => $message, 'discord' => $discord], $args);
                             return;
                         }
                     }

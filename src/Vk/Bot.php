@@ -2,7 +2,7 @@
 
 namespace Arslav\Bot\Vk;
 
-use Arslav\Bot\BaseBot;
+use Arslav\Bot\Bot as BaseBot;
 use Arslav\Bot\Api\Message;
 use DigitalStar\vk_api\vk_api;
 use DigitalStar\vk_api\VkApiException;
@@ -15,7 +15,7 @@ use DigitalStar\vk_api\VkApiException;
 class Bot extends BaseBot
 {
     protected vk_api $client;
-    protected static Message $message;
+    protected static ?Message $message = null;
 
     /**
      * @throws VkApiException
@@ -30,7 +30,7 @@ class Bot extends BaseBot
      */
     public function getMessage(): ?Message
     {
-        if (self::$message) {
+        if (!self::$message) {
             return self::$message;
         }
 

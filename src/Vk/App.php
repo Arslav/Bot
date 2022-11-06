@@ -2,24 +2,21 @@
 
 namespace Arslav\Bot\Vk;
 
-use Arslav\Bot\BaseApp;
+use Exception;
 use DI\NotFoundException;
 use DI\DependencyException;
-use DigitalStar\vk_api\vk_api;
-use Exception;
-use Psr\Container\ContainerExceptionInterface;
+use Arslav\Bot\Command;
+use Arslav\Bot\App as BaseApp;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
 
+/**
+ * Class App
+ *
+ * @package Arslav\Bot\Vk
+ */
 class App extends BaseApp
 {
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return 'VK';
-    }
-
     /**
      * @return Bot
      * @throws ContainerExceptionInterface
@@ -47,7 +44,7 @@ class App extends BaseApp
             return;
         }
 
-        /** @var Command $command */
+        /** @var Command[] $commands */
         $commands = self::getContainer()->get('vk-commands');
         foreach ($commands as $command) {
             foreach ($command->getAliases() as $alias) {

@@ -2,46 +2,30 @@
 
 namespace Arslav\Bot\Telegram;
 
-use Arslav\Bot\BaseApp;
+use Arslav\Bot\Command;
 use DI\NotFoundException;
-use TelegramBot\Api\BotApi;
-use TelegramBot\Api\Client;
 use DI\DependencyException;
+use Arslav\Bot\App as BaseApp;
 use TelegramBot\Api\Types\Update;
 use TelegramBot\Api\InvalidJsonException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * Class App
+ *
+ * @package Arslav\Bot\Telegram
+ */
 class App extends BaseApp
 {
     /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return 'Telegram';
-    }
-
-    /**
-     * @return BotApi
-     *
+     * @return Bot
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public static function getTelegram(): BotApi
+    public static function bot(): Bot
     {
-        return self::$container->get(BotApi::class);
-    }
-
-    /**
-     * @return Client
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
-    public static function getTelegramClient(): Client
-    {
-        return self::$container->get(Client::class);
+        return self::$container->get(Bot::class);
     }
 
     /**
@@ -54,16 +38,19 @@ class App extends BaseApp
      */
     protected function execute(): void
     {
-        $telegramClient = self::getTelegramClient();
+        $telegramClient = self::bot()->getTelegramClient();
         $commands = self::getContainer()->get('telegram-commands');
 
         $telegramClient->on(function (Update $update) use ($commands) {
+            self::bot()->update($update);
+            $message = self::bot()->getMessage();
+
             /** @var Command $command */
             foreach ($commands as $command) {
                 foreach ($command->getAliases() as $alias) {
                     $args = [];
-                    if ($this->checkAlias($alias, $update->getMessage()->getText(), $args)) {
-                        $command->run($update, $args);
+                    if ($this->checkAlias($alias, $message->getContent(), $args)) {
+                        $command->run($message, $args);
                         return;
                     }
                 }

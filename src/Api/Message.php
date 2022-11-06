@@ -2,22 +2,27 @@
 
 namespace Arslav\Bot\Api;
 
-use Arslav\Bot\BaseBot;
+use Arslav\Bot\Bot;
 
+/**
+ * Class Message
+ *
+ * @package Arslav\Bot\Api
+ */
 class Message
 {
     protected string $content;
     protected ?int $chatId;
     protected int $userId;
-    protected BaseBot $bot;
+    protected Bot $bot;
 
     /**
      * @param string   $content
      * @param int      $userId
      * @param int|null $chatId
-     * @param BaseBot  $bot
+     * @param Bot      $bot
      */
-    public function __construct(string $content, int $userId, ?int $chatId, BaseBot $bot)
+    public function __construct(string $content, int $userId, ?int $chatId, Bot $bot)
     {
         $this->content = $content;
         $this->chatId = $chatId;

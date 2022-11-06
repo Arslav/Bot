@@ -27,6 +27,6 @@ class SetWebhookCommand extends Command
     {
         $url = $this->args[0];
         $cert = $this->args[1] ?? null;
-        App::getTelegram()->setWebhook($url, $cert);
+        App::bot()->setWebhook($url, $cert);
     }
 }

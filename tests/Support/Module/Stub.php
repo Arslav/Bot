@@ -3,7 +3,7 @@
 namespace Tests\Support\Module;
 
 use Discord\Discord;
-use Arslav\Bot\BaseApp;
+use Arslav\Bot\App;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Client;
 use Arslav\Bot\Tests\Factories\VkApiMockFactory;
@@ -27,12 +27,8 @@ class Stub extends Module
      */
     public function _before(TestInterface $test): void
     {
-        $container = BaseApp::getContainer();
+        $container = App::getContainer();
         $container->set(LoggerInterface::class, CodeceptionStub::constructEmpty(LoggerInterface::class));
-        $container->set(vk_api::class, VkApiMockFactory::create());
-        $container->set(BotApi::class, TelegramApiMockFactory::createApi());
-        $container->set(Client::class, TelegramApiMockFactory::createClient());
-        $container->set(Discord::class, DiscordApiMockFactory::createDiscord());
 
         parent::_before($test);
     }

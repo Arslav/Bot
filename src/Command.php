@@ -2,10 +2,17 @@
 
 namespace Arslav\Bot;
 
+use Arslav\Bot\Api\Message;
 use InvalidArgumentException;
 
-abstract class BaseCommand
+/**
+ * Class BaseCommand
+ *
+ * @package Arslav\Bot
+ */
+abstract class Command
 {
+    public ?Message $message;
     protected array $aliases = [];
     protected array $args = [];
 
@@ -43,7 +50,7 @@ abstract class BaseCommand
      *
      * @return void
      */
-    public function setArgs(array $args): void
+    protected function setArgs(array $args): void
     {
         $this->args = $args;
     }
@@ -65,24 +72,14 @@ abstract class BaseCommand
     }
 
     /**
-     * @param mixed $data
+     * @param Message|null $message
+     * @param array        $args
      *
      * @return void
      */
-    protected function init(mixed $data = null): void
+    public function run(Message $message = null, array $args = []): void
     {
-        //Stub
-    }
-
-    /**
-     * @param mixed|null $data
-     * @param array      $args
-     *
-     * @return void
-     */
-    public function run(mixed $data = null, array $args = []): void
-    {
-        $this->init($data);
+        $this->message = $message;
         $this->setArgs($args);
         if ($this->beforeAction()) {
             $this->execute();

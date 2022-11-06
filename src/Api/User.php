@@ -2,18 +2,23 @@
 
 namespace Arslav\Bot\Api;
 
-use Arslav\Bot\BaseBot;
+use Arslav\Bot\Bot;
 
+/**
+ * Class User
+ *
+ * @package Arslav\Bot\Api
+ */
 class User
 {
     protected int $id;
-    protected BaseBot $bot;
+    protected Bot $bot;
 
     /**
-     * @param int     $id
-     * @param BaseBot $bot
+     * @param int $id
+     * @param Bot $bot
      */
-    public function __construct(int $id, BaseBot $bot)
+    public function __construct(int $id, Bot $bot)
     {
         $this->id = $id;
         $this->bot = $bot;

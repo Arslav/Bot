@@ -9,7 +9,7 @@ use Arslav\Bot\Api\Message;
  *
  * @package Arslav\Bot
  */
-abstract class BaseBot
+abstract class Bot
 {
     /**
      * @param string $message

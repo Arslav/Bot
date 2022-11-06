@@ -2,11 +2,11 @@
 
 namespace Arslav\Bot\Cli;
 
-use Arslav\Bot\BaseApp;
 use Exception;
-use Psr\Container\ContainerExceptionInterface;
+use Arslav\Bot\App as BaseApp;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
 
 class App extends BaseApp
 {
@@ -24,14 +24,6 @@ class App extends BaseApp
         array_shift($args);
         $this->args = $args;
         parent::__construct($container);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return 'CLI';
     }
 
     /**
